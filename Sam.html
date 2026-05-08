@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sam Altman · Keynote</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --bg-deep: #ebe8e0;
+    --surface: #ffffff;
+    --surface-glass: rgba(255, 255, 255, 0.72);
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --muted: #9a958c;
+    --line: rgba(26, 26, 26, 0.08);
+    --accent: #2c5282;       /* refined navy */
+    --accent-soft: #4a7ba7;
+    --highlight: #d4915c;    /* warm muted amber */
+    --critical: #b54748;     /* muted brick */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 16px 40px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.08), 0 32px 80px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 20% 30%, #fff8ee 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, #eef4ff 0%, transparent 50%),
+      var(--bg);
+  }
+
+  .phone {
+    position: relative;
+    width: min(420px, 95vw);
+    aspect-ratio: 9 / 16;
+    max-height: 95vh;
+    background: var(--bg);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.04),
+      0 20px 60px rgba(0, 0, 0, 0.10),
+      0 60px 120px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Subtle ambient gradient inside the phone */
+  .phone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 60%),
+      radial-gradient(circle at 50% 100%, rgba(44, 82, 130, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Flash overlay - subtle */
+  .flash {
+    position: absolute;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 200;
+  }
+
+  .flash.fire { animation: flashFire 0.4s ease-out; }
+  @keyframes flashFire {
+    0% { opacity: 0; }
+    20% { opacity: 0.5; }
+    100% { opacity: 0; }
+  }
+
+  /* Top progress bars */
+  .progress-row {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    gap: 4px;
+    z-index: 50;
+  }
+
+  .progress-seg {
+    flex: 1;
+    height: 2px;
+    background: rgba(26, 26, 26, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--ink);
+  }
+
+  .progress-seg.done .progress-fill { width: 100%; }
+  .progress-seg.active .progress-fill {
+    animation: fillBar var(--dur) linear forwards;
+  }
+  @keyframes fillBar {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+
+  /* Scenes */
+  .scenes {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 32px 100px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .scene.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Caption */
+  .caption {
+    position: absolute;
+    bottom: 50px;
+    left: 20px;
+    right: 20px;
+    z-index: 40;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 14px 16px;
+    font-weight: 400;
+    min-height: 50px;
+    letter-spacing: 0.01em;
+  }
+
+  .caption .word {
+    display: inline-block;
+    opacity: 0;
+    animation: wordIn 0.3s forwards;
+  }
+
+  @keyframes wordIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Controls */
+  .controls {
+    position: absolute;
+    bottom: 14px;
+    left: 20px;
+    right: 20px;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .control-btn {
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+  }
+
+  .control-btn:hover {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+
+  .scene-num {
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Glass card base */
+  .glass {
+    background: var(--surface-glass);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.8) inset,
+      var(--shadow-md);
+  }
+
+  /* ============================================
+     SCENE 1: HOOK
+     ============================================ */
+  .scene-1 .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0;
+  }
+
+  .scene-1.active .eyebrow {
+    animation: fadeIn 0.5s 0.1s forwards;
+  }
+
+  .scene-1 .num-small {
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 8px;
+    opacity: 0;
+  }
+
+  .scene-1.active .num-small {
+    animation: numIn 0.6s 0.3s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  @keyframes numIn {
+    0% { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  .scene-1 .role {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+    opacity: 0;
+    font-weight: 400;
+  }
+
+  .scene-1.active .role {
+    animation: fadeIn 0.4s 0.6s forwards;
+  }
+
+  .vs-divider {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--muted);
+    margin: 8px 0 28px;
+    opacity: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .scene-1.active .vs-divider {
+    animation: fadeIn 0.4s 1.4s forwards;
+  }
+
+  .scene-1 .eyebrow-bright {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0;
+  }
+
+  .scene-1.active .eyebrow-bright {
+    animation: fadeIn 0.4s 1.7s forwards;
+  }
+
+  .scene-1 .num-mega {
+    font-family: 'Inter', sans-serif;
+    font-size: 96px;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 0.95;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    opacity: 0;
+    white-space: nowrap;
+  }
+
+  .scene-1.active .num-mega {
+    animation: megaIn 0.8s 1.9s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  @keyframes megaIn {
+    0% { opacity: 0; transform: scale(0.85) translateY(15px); filter: blur(12px); }
+    60% { opacity: 1; transform: scale(1.03) translateY(0); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ============================================
+     SCENE 2: STRIPE
+     ============================================ */
+  .scene-2 .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0;
+  }
+
+  .scene-2.active .eyebrow { animation: fadeIn 0.4s forwards; }
+
+  .scene-2 .stripe-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 52px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 36px;
+    opacity: 0;
+    color: var(--ink);
+  }
+
+  .scene-2.active .stripe-name {
+    animation: nameSlide 0.5s 0.1s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  @keyframes nameSlide {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .investment-card {
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    opacity: 0;
+  }
+
+  .scene-2.active .investment-card { animation: cardSlide 0.4s 0.4s forwards; }
+
+  @keyframes cardSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .investment-card .lbl {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .investment-card .val {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .arrow-bridge {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--muted);
+    margin: 18px 0 16px;
+    opacity: 0;
+  }
+
+  .scene-2.active .arrow-bridge { animation: fadeIn 0.4s 0.9s forwards; }
+
+  .now-card {
+    width: 100%;
+    padding: 22px 20px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fff 0%, #f0f5fc 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.8) inset,
+      var(--shadow-md);
+    border: 1px solid rgba(44, 82, 130, 0.12);
+    text-align: center;
+    opacity: 0;
+  }
+
+  .scene-2.active .now-card { animation: cardSlide 0.5s 1.1s forwards; }
+
+  .now-card .lbl {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .counter {
+    font-family: 'Inter', sans-serif;
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .scene-2 .x-multi {
+    margin-top: 20px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--highlight);
+    letter-spacing: -0.02em;
+    opacity: 0;
+  }
+
+  .scene-2.active .x-multi {
+    animation: italicReveal 0.6s 2.6s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  @keyframes italicReveal {
+    0% { opacity: 0; transform: scale(0.8) rotate(-2deg); }
+    60% { opacity: 1; transform: scale(1.08) rotate(0); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ============================================
+     SCENE 3: REDDIT
+     ============================================ */
+  .scene-3 .reddit-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 44px;
+    font-weight: 400;
+    margin-bottom: 4px;
+    opacity: 0;
+    color: var(--ink);
+  }
+
+  .scene-3.active .reddit-name { animation: fadeIn 0.4s forwards; }
+
+  .scene-3 .ipo-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 32px;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  .scene-3.active .ipo-tag { animation: fadeIn 0.4s 0.2s forwards; }
+
+  .pie-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 8px 24px rgba(44, 82, 130, 0.15));
+  }
+
+  .pie-svg {
+    width: 220px;
+    height: 220px;
+    transform: rotate(-90deg);
+    opacity: 0;
+  }
+
+  .scene-3.active .pie-svg { animation: fadeIn 0.4s 0.4s forwards; }
+
+  .pie-svg circle {
+    fill: none;
+    stroke-width: 26;
+  }
+
+  .pie-bg { stroke: rgba(26, 26, 26, 0.06); }
+
+  .pie-altman {
+    stroke: var(--accent);
+    stroke-dasharray: 502;
+    stroke-dashoffset: 502;
+    stroke-linecap: round;
+  }
+
+  .scene-3.active .pie-altman {
+    animation: pieGrow 1.1s 0.8s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  @keyframes pieGrow {
+    to { stroke-dashoffset: 458; }
+  }
+
+  .pie-center {
+    position: absolute;
+    text-align: center;
+  }
+
+  .pct-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    opacity: 0;
+  }
+
+  .scene-3.active .pct-num { animation: numIn 0.5s 1.5s forwards; }
+
+  .pct-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-top: 4px;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  .scene-3.active .pct-label { animation: fadeIn 0.4s 1.7s forwards; }
+
+  .compare {
+    margin-top: 32px;
+    text-align: center;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-weight: 400;
+    opacity: 0;
+  }
+
+  .scene-3.active .compare { animation: fadeIn 0.4s 2s forwards; }
+
+  .compare strong {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ============================================
+     SCENE 4: PORTFOLIO
+     ============================================ */
+  .scene-4 .grid-header {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 22px;
+    opacity: 0;
+    font-weight: 400;
+  }
+
+  .scene-4.active .grid-header { animation: fadeIn 0.4s forwards; }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .app-tile {
+    aspect-ratio: 1;
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  .scene-4.active .app-tile {
+    animation: appPop 0.4s forwards cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+
+  @keyframes appPop {
+    0% { opacity: 0; transform: scale(0.6); }
+    60% { opacity: 1; transform: scale(1.06); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .scene-4.active .app-tile:nth-child(1) { animation-delay: 0.2s; }
+  .scene-4.active .app-tile:nth-child(2) { animation-delay: 0.30s; }
+  .scene-4.active .app-tile:nth-child(3) { animation-delay: 0.40s; }
+  .scene-4.active .app-tile:nth-child(4) { animation-delay: 0.50s; }
+  .scene-4.active .app-tile:nth-child(5) { animation-delay: 0.60s; }
+  .scene-4.active .app-tile:nth-child(6) { animation-delay: 0.70s; }
+  .scene-4.active .app-tile:nth-child(7) { animation-delay: 0.80s; }
+  .scene-4.active .app-tile:nth-child(8) { animation-delay: 0.90s; }
+  .scene-4.active .app-tile:nth-child(9) { animation-delay: 1.05s; }
+
+  .app-tile .ico {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    font-size: 26px;
+    color: var(--ink);
+  }
+
+  .app-tile .name {
+    font-family: 'Inter', sans-serif;
+    font-size: 7px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .app-tile.summary {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.2) inset,
+      0 8px 20px rgba(44, 82, 130, 0.25);
+  }
+
+  .app-tile.summary .ico {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+  }
+
+  .app-tile.summary .name {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* ============================================
+     SCENE 5: HARD TECH
+     ============================================ */
+  .scene-5 .ht-header {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0;
+  }
+
+  .scene-5.active .ht-header { animation: fadeIn 0.4s forwards; }
+
+  .scene-5 .ht-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 36px;
+    opacity: 0;
+  }
+
+  .scene-5.active .ht-title { animation: nameSlide 0.5s 0.1s forwards; }
+
+  .bet-row {
+    width: 100%;
+    margin-bottom: 26px;
+    opacity: 0;
+  }
+
+  .scene-5.active .bet-row:nth-child(3) { animation: fadeIn 0.4s 0.5s forwards; }
+  .scene-5.active .bet-row:nth-child(4) { animation: fadeIn 0.4s 1.4s forwards; }
+
+  .bet-row .name {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .bet-row .desc {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+
+  .bar-track {
+    width: 100%;
+    height: 36px;
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow:
+      inset 0 1px 2px rgba(0,0,0,0.04);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-soft) 100%);
+    width: 0%;
+    border-radius: 8px;
+  }
+
+  .scene-5.active .bet-row:nth-child(3) .bar-fill {
+    animation: barGrow1 0.9s 0.7s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+  .scene-5.active .bet-row:nth-child(4) .bar-fill {
+    animation: barGrow2 0.9s 1.6s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  @keyframes barGrow1 { to { width: 100%; } }
+  @keyframes barGrow2 { to { width: 48%; } }
+
+  .bar-amount {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    z-index: 5;
+    opacity: 0;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .scene-5.active .bet-row:nth-child(3) .bar-amount {
+    animation: fadeIn 0.3s 1.4s forwards;
+  }
+  .scene-5.active .bet-row:nth-child(4) .bar-amount {
+    animation: fadeIn 0.3s 2.3s forwards;
+  }
+
+  .bar-amount.outside {
+    color: var(--accent);
+    right: -68px;
+  }
+
+  /* ============================================
+     SCENE 6: OKLO
+     ============================================ */
+  .scene-6 .oklo-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.25em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  .scene-6.active .oklo-tag { animation: fadeIn 0.4s forwards; }
+
+  .scene-6 .oklo-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 30px;
+    font-weight: 400;
+    margin-bottom: 40px;
+    opacity: 0;
+    color: var(--ink);
+  }
+
+  .scene-6.active .oklo-name { animation: fadeIn 0.4s 0.1s forwards; }
+
+  .scene-6 .step-card {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    opacity: 0;
+  }
+
+  .scene-6.active .step-card.buy { animation: cardSlide 0.4s 0.4s forwards; }
+
+  .scene-6 .step-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .scene-6 .small-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    opacity: 0;
+  }
+
+  .scene-6.active .small-price { animation: fadeIn 0.3s 0.6s forwards; }
+
+  .scene-6 .arrow-down {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--muted);
+    margin: 12px 0;
+    opacity: 0;
+  }
+
+  .scene-6.active .arrow-down { animation: fadeIn 0.4s 1s forwards; }
+
+  .scene-6 .now-big-card {
+    width: 100%;
+    padding: 24px 20px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fff 0%, #f0f5fc 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.8) inset,
+      var(--shadow-md);
+    border: 1px solid rgba(44, 82, 130, 0.12);
+    text-align: center;
+    opacity: 0;
+  }
+
+  .scene-6.active .now-big-card { animation: cardSlide 0.5s 1.4s forwards; }
+
+  .scene-6 .now-big-card .step-label {
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 10px;
+  }
+
+  .scene-6 .explode-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  .scene-6.active .explode-num {
+    animation: numIn 0.5s 1.7s forwards;
+  }
+
+  .scene-6 .multiplier-tag {
+    margin-top: 24px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--highlight);
+    letter-spacing: -0.02em;
+    opacity: 0;
+  }
+
+  .scene-6.active .multiplier-tag {
+    animation: italicReveal 0.6s 2.4s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  /* ============================================
+     SCENE 7: ZERO
+     ============================================ */
+  .scene-7 .openai-mark {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    opacity: 0;
+    color: var(--ink);
+  }
+
+  .scene-7.active .openai-mark { animation: fadeIn 0.4s forwards; }
+
+  .scene-7 .valuation-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  .scene-7.active .valuation-tag { animation: fadeIn 0.4s 0.2s forwards; }
+
+  .scene-7 .stake-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--critical);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  .scene-7.active .stake-label { animation: fadeIn 0.4s 0.5s forwards; }
+
+  .scene-7 .zero-mega {
+    font-family: 'Instrument Serif', serif;
+    font-size: 240px;
+    font-weight: 400;
+    color: var(--critical);
+    line-height: 0.85;
+    opacity: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .scene-7.active .zero-mega {
+    animation: zeroIn 0.9s 0.9s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  @keyframes zeroIn {
+    0% { opacity: 0; transform: scale(0.4); filter: blur(20px); }
+    60% { opacity: 1; transform: scale(1.05); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .scene-7 .pct-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--critical);
+    letter-spacing: 0.3em;
+    margin-top: 4px;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  .scene-7.active .pct-text { animation: fadeIn 0.4s 1.7s forwards; }
+
+  .scene-7 .footnote {
+    margin-top: 32px;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+    line-height: 1.7;
+    font-weight: 400;
+    opacity: 0;
+  }
+
+  .scene-7.active .footnote { animation: fadeIn 0.4s 2s forwards; }
+
+  .scene-7 .footnote strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* ============================================
+     SCENE 8: CLOSING
+     ============================================ */
+  .scene-8 .closing-line {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    text-align: center;
+    font-weight: 400;
+    opacity: 0;
+  }
+
+  .scene-8.active .closing-line { animation: fadeIn 0.5s forwards; }
+
+  .id-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .id-card {
+    border-radius: 16px;
+    padding: 20px 22px;
+    opacity: 0;
+  }
+
+  .id-card.public {
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .id-card.real {
+    background: linear-gradient(135deg, #fff 0%, #f0f5fc 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.8) inset,
+      var(--shadow-md);
+    border: 1px solid rgba(44, 82, 130, 0.15);
+  }
+
+  .scene-8.active .id-card.public { animation: cardSlide 0.5s 0.4s forwards; }
+  .scene-8.active .id-card.real { animation: cardSlide 0.6s 1s forwards; }
+
+  .id-card .label-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .id-card.real .label-tag { color: var(--accent); }
+
+  .id-card .role-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .id-card.real .role-name { color: var(--accent); }
+
+  .id-card .stat-line {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .id-card.real .stat-line { color: var(--accent-soft); }
+
+  .next-strip {
+    margin-top: 28px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px dashed rgba(44, 82, 130, 0.3);
+    text-align: center;
+    width: 100%;
+    opacity: 0;
+  }
+
+  .scene-8.active .next-strip { animation: fadeIn 0.5s 1.7s forwards; }
+
+  .next-strip .nxt {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .next-strip .topic {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  /* Common */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Chinese unit suffix (亿/万) renders slightly smaller than numbers
+     so the digits remain the visual hero. Inter doesn't have CJK glyphs,
+     so we explicitly fall back to Noto Sans SC for these characters. */
+  .num-mega, .counter, .explode-num, .bar-amount {
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  }
+
+  .cn-unit {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.62em;
+    font-weight: 500;
+    margin-left: 0.08em;
+    letter-spacing: 0.02em;
+    vertical-align: 0.08em;
+    opacity: 0.85;
+  }
+
+  /* ============================================
+     SCENE A (new 1): Sticker reveal + provocation
+     ============================================ */
+  .scene-a {
+    justify-content: flex-start;
+    padding-top: 80px;
+  }
+
+  .scene-a .sticker-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 48px;
+    opacity: 0;
+  }
+
+  .scene-a.active .sticker-block {
+    animation: stickerFullAnim 3.8s 0.2s forwards cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Phase 1: enter big + centered, wobble.  Phase 2: shrink + move up */
+  @keyframes stickerFullAnim {
+    0%   { opacity: 0; transform: scale(0.5) translateY(140px); }
+    8%   { opacity: 1; transform: scale(1.35) translateY(140px); }
+    18%  { opacity: 1; transform: scale(1.35) translateY(140px) rotate(-6deg); }
+    26%  { opacity: 1; transform: scale(1.35) translateY(140px) rotate(5deg); }
+    34%  { opacity: 1; transform: scale(1.35) translateY(140px) rotate(-3deg); }
+    42%  { opacity: 1; transform: scale(1.35) translateY(140px) rotate(0deg); }
+    55%  { opacity: 1; transform: scale(1.35) translateY(140px) rotate(0deg); }
+    80%  { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+    100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+  }
+
+  .scene-a .sticker-frame {
+    width: 180px;
+    height: 180px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12))
+            drop-shadow(0 16px 32px rgba(0, 0, 0, 0.08));
+  }
+
+  .scene-a .sticker-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Placeholder (shows when no real image) */
+  .scene-a .sticker-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e8eef7 0%, #d4dfee 100%);
+    border-radius: 24px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 64px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .scene-a .sticker-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    opacity: 0;
+  }
+
+  .scene-a.active .sticker-name {
+    animation: fadeIn 0.4s 3.2s forwards;
+  }
+
+  .scene-a .sticker-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0;
+  }
+
+  .scene-a.active .sticker-role {
+    animation: fadeIn 0.4s 3.4s forwards;
+  }
+
+  .scene-a .quote-line {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+
+  .scene-a .quote-line .word-block {
+    display: inline-block;
+    opacity: 0;
+  }
+
+  /* Text appears AFTER sticker wobble finishes (~1.8s) */
+  .scene-a.active .quote-line .word-block {
+    animation: wordRise 0.5s forwards cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  .scene-a.active .quote-line .word-block:nth-child(1) { animation-delay: 4.0s; }
+  .scene-a.active .quote-line .word-block:nth-child(2) { animation-delay: 4.4s; }
+  .scene-a.active .quote-line .word-block:nth-child(3) { animation-delay: 4.8s; }
+  .scene-a.active .quote-line .word-block:nth-child(4) { animation-delay: 5.2s; }
+
+  @keyframes wordRise {
+    from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  .scene-a .strikethrough {
+    position: relative;
+    color: var(--ink);
+    font-weight: 500;
+    font-style: normal;
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    padding: 0 4px;
+  }
+
+  .scene-a .strikethrough::after {
+    content: '';
+    position: absolute;
+    left: -2%;
+    top: 52%;
+    width: 0%;
+    height: 1.5px;
+    background: var(--critical);
+  }
+
+  .scene-a.active .strikethrough::after {
+    animation: strikeOut 0.5s 6.2s forwards cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  @keyframes strikeOut {
+    to { width: 104%; }
+  }
+
+
+  /* ============================================
+     SCENE B (new 2): Bio sketch
+     ============================================ */
+  .scene-b .bio-header {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    opacity: 0;
+  }
+
+  .scene-b.active .bio-header { animation: fadeIn 0.4s forwards; }
+
+  .bio-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .bio-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    opacity: 0;
+  }
+
+  .scene-b.active .bio-row:nth-child(1) { animation: bioSlideIn 0.5s 0.3s forwards; }
+  .scene-b.active .bio-row:nth-child(2) { animation: bioSlideIn 0.5s 1.2s forwards; }
+  .scene-b.active .bio-row:nth-child(3) { animation: bioSlideIn 0.5s 2.1s forwards; }
+
+  @keyframes bioSlideIn {
+    from { opacity: 0; transform: translateX(-16px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .bio-row .age {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    width: 56px;
+  }
+
+  .bio-row .age .age-unit {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+
+  .bio-row .event {
+    flex: 1;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  .bio-row .event strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ============================================
+     SCENE C (new 3): Quote + first venture
+     ============================================ */
+  .scene-c .quote-mark {
+    font-family: 'Instrument Serif', serif;
+    font-size: 72px;
+    line-height: 0.4;
+    color: var(--accent);
+    margin-bottom: 16px;
+    height: 32px;
+    opacity: 0;
+  }
+
+  .scene-c.active .quote-mark { animation: fadeIn 0.4s forwards; }
+
+  .scene-c .big-quote {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--ink);
+    text-align: center;
+    margin-bottom: 24px;
+    max-width: 320px;
+    font-weight: 400;
+  }
+
+  .scene-c .big-quote .word {
+    display: inline-block;
+    opacity: 0;
+  }
+
+  .scene-c.active .big-quote .word {
+    animation: fadeIn 0.4s forwards;
+  }
+
+  .scene-c .quote-attr {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  .scene-c.active .quote-attr { animation: fadeIn 0.4s 2.0s forwards; }
+
+  .scene-c .followup-card {
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fff 0%, #f0f5fc 100%);
+    border: 1px solid rgba(44, 82, 130, 0.12);
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+  }
+
+  .scene-c.active .followup-card { animation: cardSlide 0.5s 2.5s forwards; }
+
+  .followup-card .label-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .followup-card .topic {
+    font-family: 'Instrument Serif', serif;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  .followup-card .topic strong {
+    color: var(--accent);
+    font-weight: 400;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="phone">
+
+    <div class="flash" id="flash"></div>
+
+    <div class="progress-row" id="progressRow"></div>
+
+    <div class="scenes">
+
+      <!-- NEW Scene A: Sticker reveal + provocation -->
+      <div class="scene scene-a" data-scene="a">
+        <div class="sticker-block">
+          <div class="sticker-frame">
+            <!-- Sticker image -->
+            <img id="altmanSticker"
+                 src="https://gw.alicdn.com/imgextra/i1/O1CN01NFJCGA1SSGJ4vIPLN_!!6000000002245-2-tps-1024-1024.png"
+                 alt="Sam Altman"
+                 referrerpolicy="no-referrer"
+                 crossorigin="anonymous"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="sticker-placeholder" style="display:none;">SA</div>
+          </div>
+          <div class="sticker-name">Sam Altman</div>
+          <div class="sticker-role">OpenAI · CEO</div>
+        </div>
+        <div class="quote-line">
+          <span class="word-block">你以为他</span>
+          <span class="word-block">是因为</span>
+          <span class="word-block strikethrough">ChatGPT</span>
+          <span class="word-block">才出名的？</span>
+        </div>
+      </div>
+
+      <!-- NEW Scene B: Bio sketch -->
+      <div class="scene scene-b" data-scene="b">
+        <div class="bio-header">在 OpenAI 之前</div>
+        <div class="bio-stack">
+          <div class="bio-row">
+            <div class="age">8<span class="age-unit">岁</span></div>
+            <div class="event">拥有人生第一台 <strong>Macintosh</strong>，自己拆开研究</div>
+          </div>
+          <div class="bio-row">
+            <div class="age">17<span class="age-unit">岁</span></div>
+            <div class="event">考入 <strong>斯坦福</strong> 计算机系，进 AI 实验室</div>
+          </div>
+          <div class="bio-row">
+            <div class="age">19<span class="age-unit">岁</span></div>
+            <div class="event"><strong>退学</strong>，开始第一次创业</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW Scene C: Quote + Loopt -->
+      <div class="scene scene-c" data-scene="c">
+        <div class="quote-mark">"</div>
+        <div class="big-quote" id="quoteText">从打扑克学到的，比教授课堂上还多。</div>
+        <div class="quote-attr">— SAM ALTMAN, 后来在《纽约时报》</div>
+        <div class="followup-card">
+          <div class="label-tag">19 岁的第一笔创业</div>
+          <div class="topic">创办 <strong>Loopt</strong> · 入选 YC 史上最早 8 家公司</div>
+        </div>
+      </div>
+
+      <!-- Scene 1: Hook -->
+      <div class="scene scene-1" data-scene="1">
+        <div class="eyebrow">OpenAI · 年薪</div>
+        <div class="num-small" id="num1a">$76,000</div>
+        <div class="role">— Sam Altman</div>
+
+        <div class="vs-divider">而他的</div>
+
+        <div class="eyebrow-bright">个人身价</div>
+        <div class="num-mega" id="num1b">$20<span class="cn-unit">亿</span></div>
+      </div>
+
+      <!-- Scene 2: Stripe -->
+      <div class="scene scene-2" data-scene="2">
+        <div class="eyebrow">2009 · 第一笔</div>
+        <div class="stripe-name">Stripe</div>
+
+        <div class="investment-card">
+          <span class="lbl">买入</span>
+          <span class="val">$15,000</span>
+        </div>
+
+        <div class="arrow-bridge">17 年后…</div>
+
+        <div class="now-card">
+          <div class="lbl">如今估值</div>
+          <div class="counter" id="num2">$700<span class="cn-unit">亿</span></div>
+        </div>
+
+        <div class="x-multi">≈ 90,000 ×</div>
+      </div>
+
+      <!-- Scene 3: Reddit -->
+      <div class="scene scene-3" data-scene="3">
+        <div class="reddit-name">Reddit</div>
+        <div class="ipo-tag">2024 · IPO</div>
+
+        <div class="pie-wrap">
+          <svg class="pie-svg" viewBox="0 0 200 200">
+            <circle class="pie-bg" cx="100" cy="100" r="80"></circle>
+            <circle class="pie-altman" cx="100" cy="100" r="80"></circle>
+          </svg>
+          <div class="pie-center">
+            <div class="pct-num" id="num3">8.7%</div>
+            <div class="pct-label">Sam Altman</div>
+          </div>
+        </div>
+
+        <div class="compare">是 CEO 持股的 <strong>2.3 倍</strong></div>
+      </div>
+
+      <!-- Scene 4: Portfolio -->
+      <div class="scene scene-4" data-scene="4">
+        <div class="grid-header">YC 时代 · 个人投资组合</div>
+        <div class="app-grid">
+          <div class="app-tile"><div class="ico">A</div><div class="name">Airbnb</div></div>
+          <div class="app-tile"><div class="ico">P</div><div class="name">Pinterest</div></div>
+          <div class="app-tile"><div class="ico">I</div><div class="name">Instacart</div></div>
+          <div class="app-tile"><div class="ico">A</div><div class="name">Asana</div></div>
+          <div class="app-tile"><div class="ico">D</div><div class="name">DoorDash</div></div>
+          <div class="app-tile"><div class="ico">U</div><div class="name">Uber</div></div>
+          <div class="app-tile"><div class="ico">D</div><div class="name">Dropbox</div></div>
+          <div class="app-tile"><div class="ico">R</div><div class="name">Reddit</div></div>
+          <div class="app-tile summary"><div class="ico" id="num4">400+</div><div class="name">公司</div></div>
+        </div>
+      </div>
+
+      <!-- Scene 5: Hard tech -->
+      <div class="scene scene-5" data-scene="5">
+        <div class="ht-header">不止于软件</div>
+        <div class="ht-title">他押注的硬科技</div>
+
+        <div class="bet-row">
+          <div class="name">Helion · 核聚变</div>
+          <div class="desc">2028 年向微软供电</div>
+          <div class="bar-track">
+            <div class="bar-fill"></div>
+            <div class="bar-amount" id="num5a">$3.75<span class="cn-unit">亿</span></div>
+          </div>
+        </div>
+
+        <div class="bet-row">
+          <div class="name">Retro · 抗衰生物</div>
+          <div class="desc">让人类多活十年</div>
+          <div class="bar-track">
+            <div class="bar-fill"></div>
+            <div class="bar-amount outside" id="num5b">$1.8<span class="cn-unit">亿</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 6: Oklo -->
+      <div class="scene scene-6" data-scene="6">
+        <div class="oklo-tag">2021 · Oklo</div>
+        <div class="oklo-name">核裂变 · 创始股</div>
+
+        <div class="step-card buy">
+          <span class="step-label">买入价</span>
+          <span class="small-price">$0.002</span>
+        </div>
+
+        <div class="arrow-down">三年后…</div>
+
+        <div class="now-big-card">
+          <span class="step-label">如今估值</span>
+          <div class="explode-num" id="num6">$8.8<span class="cn-unit">亿</span></div>
+        </div>
+
+        <div class="multiplier-tag">70,000 ×</div>
+      </div>
+
+      <!-- Scene 7: Zero -->
+      <div class="scene scene-7" data-scene="7">
+        <div class="openai-mark">OpenAI</div>
+        <div class="valuation-tag">估值 $300B+</div>
+
+        <div class="stake-label">Sam Altman 持股</div>
+        <div class="zero-mega">0</div>
+        <div class="pct-text">PERCENT</div>
+
+        <div class="footnote">ChatGPT 估值飙到几千亿<br>他个人账面 <strong>一分没多</strong></div>
+      </div>
+
+      <!-- Scene 8: Closing -->
+      <div class="scene scene-8" data-scene="8">
+        <div class="closing-line">他真正的身份是…</div>
+        <div class="id-stack">
+          <div class="id-card public">
+            <div class="label-tag">公开身份</div>
+            <div class="role-name">OpenAI CEO</div>
+            <div class="stat-line">年薪 $76,000 · 持股 0%</div>
+          </div>
+          <div class="id-card real">
+            <div class="label-tag">真实身份</div>
+            <div class="role-name">硅谷最会下注的人</div>
+            <div class="stat-line">身价 $2B · 投出 400+ 公司</div>
+          </div>
+        </div>
+        <div class="next-strip">
+          <div class="nxt">下期 · Coming</div>
+          <div class="topic">扫眼球的男人 — Worldcoin</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="caption" id="caption"></div>
+
+    <div class="controls">
+      <button class="control-btn" onclick="prevScene()">←</button>
+      <span><span class="scene-num" id="sceneNum">01</span> / 11</span>
+      <button class="control-btn" onclick="togglePlay()" id="playBtn">⏸</button>
+      <button class="control-btn" onclick="nextScene()">→</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const scenes = [
+    {
+      dur: 9000,
+      caption: 'Sam Altman 想必大家都不陌生'
+    },
+    {
+      dur: 6500,
+      caption: '8 岁拆电脑，17 岁进斯坦福，19 岁退学。'
+    },
+    {
+      dur: 6500,
+      caption: '"打扑克学到的比教授还多。" — 19 岁，他创办了 Loopt。'
+    },
+    {
+      dur: 6500,
+      caption: '20 年后的今天，他在 OpenAI 年薪 7 万 6。但身价 20 亿。',
+      counters: [
+        { id: 'num1a', from: 0, to: 76000, prefix: '$', delay: 300, duration: 800, format: 'big' },
+        { id: 'num1b', from: 0, to: 2000000000, prefix: '$', delay: 1900, duration: 1200, format: 'cn' }
+      ],
+      flash: 1900
+    },
+    {
+      dur: 5500,
+      caption: '$15,000 买 Stripe 2% 股份。如今 700 亿。',
+      counters: [
+        { id: 'num2', from: 0, to: 70000000000, prefix: '$', delay: 1300, duration: 1300, format: 'cn' }
+      ]
+    },
+    {
+      dur: 5000,
+      caption: 'Reddit 上市，他持股 8.7% — CEO 的 2 倍多。',
+      counters: [
+        { id: 'num3', from: 0, to: 8.7, suffix: '%', delay: 800, duration: 1000, decimals: 1 }
+      ]
+    },
+    {
+      dur: 5500,
+      caption: 'Airbnb、Reddit、Uber、Dropbox… 他押中了一整代。',
+      counters: [
+        { id: 'num4', from: 0, to: 400, suffix: '+', delay: 1300, duration: 800 }
+      ]
+    },
+    {
+      dur: 6000,
+      caption: '3.75 亿押核聚变，1.8 亿砸抗衰老。',
+      counters: [
+        { id: 'num5a', from: 0, to: 375000000, prefix: '$', delay: 1300, duration: 700, format: 'cn' },
+        { id: 'num5b', from: 0, to: 180000000, prefix: '$', delay: 2200, duration: 700, format: 'cn' }
+      ]
+    },
+    {
+      dur: 5500,
+      caption: 'Oklo 创始股 0.002 美金。三年回报 7 万倍。',
+      counters: [
+        { id: 'num6', from: 0, to: 880000000, prefix: '$', delay: 1700, duration: 1000, format: 'cn' }
+      ]
+    },
+    {
+      dur: 5500,
+      caption: '而他在 OpenAI 的持股 — 是 0。',
+      flash: 900
+    },
+    {
+      dur: 5500,
+      caption: '他不是 ChatGPT 之父。他是硅谷最会下注的人。'
+    }
+  ];
+
+  let current = 0;
+  let isPlaying = true;
+  let timer = null;
+  let counterTimers = [];
+
+  const progressRow = document.getElementById('progressRow');
+  scenes.forEach((s, i) => {
+    const seg = document.createElement('div');
+    seg.className = 'progress-seg';
+    seg.id = `seg-${i}`;
+    seg.style.setProperty('--dur', s.dur + 'ms');
+    const fill = document.createElement('div');
+    fill.className = 'progress-fill';
+    seg.appendChild(fill);
+    progressRow.appendChild(seg);
+  });
+
+  function formatNumber(n, decimals = 0, format = '') {
+    if (format === 'cn') {
+      // Chinese: 亿 (1e8) and 万 (1e4)
+      const abs = Math.abs(n);
+      if (abs >= 1e8) {
+        const v = n / 1e8;
+        const num = (v % 1 === 0 ? v.toFixed(0) : v.toFixed(1));
+        return num + '<span class="cn-unit">亿</span>';
+      }
+      if (abs >= 1e4) {
+        const v = n / 1e4;
+        const num = (v % 1 === 0 ? v.toFixed(0) : v.toFixed(1));
+        return num + '<span class="cn-unit">万</span>';
+      }
+      return Math.round(n).toString();
+    }
+    if (format === 'big') {
+      return Math.round(n).toLocaleString('en-US');
+    }
+    if (decimals > 0) {
+      return n.toFixed(decimals);
+    }
+    return Math.round(n).toLocaleString('en-US');
+  }
+
+  function animateCounter(config) {
+    const el = document.getElementById(config.id);
+    if (!el) return;
+
+    const startDelay = config.delay || 0;
+    const duration = config.duration || 1000;
+    const from = config.from || 0;
+    const to = config.to;
+    const prefix = config.prefix || '';
+    const suffix = config.suffix || '';
+    const decimals = config.decimals || 0;
+    const format = config.format || '';
+
+    setTimeout(() => {
+      el.innerHTML = prefix + formatNumber(from, decimals, format) + suffix;
+    }, Math.max(0, startDelay - 100));
+
+    const t = setTimeout(() => {
+      const startTime = performance.now();
+
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = from + (to - from) * eased;
+
+        el.innerHTML = prefix + formatNumber(value, decimals, format) + suffix;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerHTML = prefix + formatNumber(to, decimals, format) + suffix;
+        }
+      }
+
+      requestAnimationFrame(update);
+    }, startDelay);
+
+    counterTimers.push(t);
+  }
+
+  function triggerFlash(delay) {
+    const t = setTimeout(() => {
+      const flash = document.getElementById('flash');
+      flash.classList.remove('fire');
+      void flash.offsetWidth;
+      flash.classList.add('fire');
+    }, delay);
+    counterTimers.push(t);
+  }
+
+  function clearCounterTimers() {
+    counterTimers.forEach(t => clearTimeout(t));
+    counterTimers = [];
+  }
+
+  function showScene(idx) {
+    clearCounterTimers();
+
+    document.querySelectorAll('.scene').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+
+    document.querySelectorAll('.progress-seg').forEach((seg, i) => {
+      seg.classList.remove('active', 'done');
+      if (i < idx) seg.classList.add('done');
+      if (i === idx && isPlaying) {
+        seg.offsetHeight;
+        seg.classList.add('active');
+      }
+    });
+
+    const s = scenes[idx];
+
+    const caption = document.getElementById('caption');
+    caption.innerHTML = '';
+    const chars = s.caption.split('');
+    chars.forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'word';
+      span.textContent = ch;
+      span.style.animationDelay = (i * 30) + 'ms';
+      caption.appendChild(span);
+    });
+
+    document.getElementById('sceneNum').textContent = String(idx + 1).padStart(2, '0');
+
+    // Scene C: per-char animation for the quote
+    if (idx === 2) {
+      const quoteEl = document.getElementById('quoteText');
+      if (quoteEl) {
+        const text = '从打扑克学到的，比教授课堂上还多。';
+        quoteEl.innerHTML = '';
+        text.split('').forEach((ch, i) => {
+          const span = document.createElement('span');
+          span.className = 'word';
+          span.textContent = ch;
+          span.style.animationDelay = (0.5 + i * 0.06) + 's';
+          quoteEl.appendChild(span);
+        });
+      }
+    }
+
+    if (s.counters) {
+      s.counters.forEach(c => animateCounter(c));
+    }
+
+    if (s.flash) {
+      triggerFlash(s.flash);
+    }
+  }
+
+  function nextScene() {
+    clearTimeout(timer);
+    current = (current + 1) % scenes.length;
+    showScene(current);
+    if (isPlaying) scheduleNext();
+  }
+
+  function prevScene() {
+    clearTimeout(timer);
+    current = (current - 1 + scenes.length) % scenes.length;
+    showScene(current);
+    if (isPlaying) scheduleNext();
+  }
+
+  function scheduleNext() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      current = (current + 1) % scenes.length;
+      showScene(current);
+      scheduleNext();
+    }, scenes[current].dur);
+  }
+
+  function togglePlay() {
+    isPlaying = !isPlaying;
+    document.getElementById('playBtn').textContent = isPlaying ? '⏸' : '▶';
+    if (isPlaying) {
+      const seg = document.getElementById(`seg-${current}`);
+      seg.classList.remove('active');
+      seg.offsetHeight;
+      seg.classList.add('active');
+      scheduleNext();
+    } else {
+      clearTimeout(timer);
+      clearCounterTimers();
+      const seg = document.getElementById(`seg-${current}`);
+      const fill = seg.querySelector('.progress-fill');
+      const w = fill.getBoundingClientRect().width;
+      const parentW = seg.getBoundingClientRect().width;
+      seg.classList.remove('active');
+      fill.style.width = (w / parentW * 100) + '%';
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') nextScene();
+    if (e.key === 'ArrowLeft') prevScene();
+    if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+  });
+
+  showScene(0);
+  scheduleNext();
+</script>
+
+</body>
+</html>

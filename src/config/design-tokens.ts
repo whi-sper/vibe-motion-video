@@ -1,0 +1,17 @@
+export const DESIGN = {
+  bg: '#f5f3ee',
+  bgDeep: '#ebe8e0',
+  surface: '#ffffff',
+  surfaceGlass: 'rgba(255, 255, 255, 0.72)',
+  ink: '#1a1a1a',
+  inkSoft: '#4a4a4a',
+  muted: '#9a958c',
+  line: 'rgba(26, 26, 26, 0.08)',
+  accent: '#2c5282',
+  accentSoft: '#4a7ba7',
+  highlight: '#d4915c',
+  critical: '#b54748',
+  shadowSm: '0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.04)',
+  shadowMd: '0 4px 12px rgba(0,0,0,0.06), 0 16px 40px rgba(0,0,0,0.06)',
+  shadowLg: '0 8px 24px rgba(0,0,0,0.08), 0 32px 80px rgba(0,0,0,0.08)',
+} as const;
