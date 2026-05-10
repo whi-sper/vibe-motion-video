@@ -2,3 +2,4 @@
 dist
 out
 public/tts
+node_modules/

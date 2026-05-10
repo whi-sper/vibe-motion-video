@@ -8,6 +8,8 @@
     "build": "remotion render SamAltman out/sam-altman.mp4 --crf 18",
     "tts:generate": "node scripts/generate-qwen-tts.mjs",
     "tts:generate:force": "node scripts/generate-qwen-tts.mjs --force",
+    "tts:generate:qwen": "TTS_PROVIDER=qwen node scripts/generate-qwen-tts.mjs",
+    "tts:generate:minimax": "TTS_PROVIDER=minimax node scripts/generate-qwen-tts.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

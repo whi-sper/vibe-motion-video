@@ -15,17 +15,15 @@ const GENERATED_TS_PATH = path.join(ROOT_DIR, 'src', 'data', 'scene-audio.ts');
 
 loadEnvFile(path.join(ROOT_DIR, '.env.local'));
 
-const API_URL =
+const QWEN_API_URL =
   process.env.QWEN_TTS_API_URL ??
   'https://dashscope.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer';
+const MINIMAX_API_URL =
+  process.env.MINIMAX_TTS_API_URL ?? 'https://api.minimax.io/v1/t2a_v2';
 
 const args = new Set(process.argv.slice(2));
 const force = args.has('--force');
 const dryRun = args.has('--dry-run');
-
-const apiKey = requireEnv('QWEN_TTS_API_KEY');
-const defaultModel = process.env.QWEN_TTS_MODEL ?? 'cosyvoice-v3.5-plus';
-const defaultVoice = requireEnv('QWEN_TTS_VOICE');
 
 const config = JSON.parse(await fs.readFile(CONFIG_PATH, 'utf8'));
 const manifest = await readJsonSafe(MANIFEST_PATH, { items: {} });
@@ -36,6 +34,9 @@ await fs.mkdir(PUBLIC_TTS_DIR, { recursive: true });
 for (const scene of config.scenes ?? []) {
   validateScene(scene);
 
+  const provider = resolveProvider(
+    process.env.TTS_PROVIDER ?? scene.provider ?? config.global?.provider ?? 'qwen'
+  );
   const text = scene.text.trim();
   if (!text) {
     console.warn(`[skip] scene ${scene.sceneId}: empty text`);
@@ -47,30 +48,13 @@ for (const scene of config.scenes ?? []) {
   const relPath = path.posix.join('tts', scene.sceneId, outputFileName);
   const absPath = path.join(ROOT_DIR, 'public', relPath);
 
-  const requestModel = scene.model ?? config.global?.model ?? defaultModel;
-  const requestVoice = scene.voice ?? config.global?.voice ?? defaultVoice;
-  const requestInput = compactObject({
-    text,
-    voice: requestVoice,
-    format: outputFormat,
-    sample_rate: scene.sampleRate ?? config.global?.sampleRate,
-    volume: scene.volume ?? config.global?.volume,
-    rate: scene.rate ?? config.global?.rate,
-    pitch: scene.pitch ?? config.global?.pitch,
-    instruction:
-      scene.instruction ||
-      config.global?.instruction ||
-      undefined,
-    language_hints:
-      scene.languageHints ?? config.global?.languageHints ?? undefined,
-    enable_ssml:
-      scene.enableSsml ?? config.global?.enableSsml ?? undefined,
-  });
+  const request = buildTtsRequest({ provider, scene, config, text, outputFormat });
 
   const fingerprint = sha1(
     JSON.stringify({
-      model: requestModel,
-      input: requestInput,
+      provider,
+      model: request.model,
+      input: request.input,
     })
   );
 
@@ -84,42 +68,38 @@ for (const scene of config.scenes ?? []) {
   }
 
   if (dryRun) {
-    console.log(`[dry-run] scene ${scene.sceneId}: ${text}`);
+    console.log(`[dry-run] scene ${scene.sceneId} (${provider}): ${text}`);
     continue;
   }
 
-  console.log(`[generate] scene ${scene.sceneId}`);
+  console.log(`[generate] scene ${scene.sceneId} (${provider})`);
   await fs.mkdir(path.dirname(absPath), { recursive: true });
 
-  const response = await synthesize({
-    apiKey,
-    model: requestModel,
-    input: requestInput,
+  const result = await synthesize({
+    provider,
+    sceneId: scene.sceneId,
+    model: request.model,
+    input: request.input,
   });
-  const audioUrl = response.output?.audio?.url;
-
-  if (!audioUrl) {
-    throw new Error(
-      `scene ${scene.sceneId} returned no audio URL: ${JSON.stringify(response)}`
-    );
-  }
-
-  const audioBuffer = await downloadBuffer(audioUrl);
+  const audioBuffer = result.audioBuffer;
   await fs.writeFile(absPath, audioBuffer);
 
   const durationSec =
-    outputFormat === 'wav' ? getWavDurationSec(audioBuffer) : undefined;
+    outputFormat === 'wav'
+      ? getWavDurationSec(audioBuffer) ?? result.durationSec
+      : result.durationSec;
 
   nextItems[scene.sceneId] = {
     sceneId: scene.sceneId,
+    provider,
     text,
     src: relPath.replaceAll(path.sep, '/'),
     format: outputFormat,
-    model: requestModel,
-    voice: requestVoice,
-    requestId: response.request_id,
+    model: request.model,
+    voice: request.voice,
+    requestId: result.requestId,
     durationSec,
-    characters: response.usage?.characters,
+    characters: result.characters,
     fingerprint,
     generatedAt: new Date().toISOString(),
   };
@@ -159,6 +139,7 @@ function buildSceneAudioModule(items) {
     serializable[sceneId] = {
       src: item.src,
       durationSec: item.durationSec,
+      provider: item.provider,
       requestId: item.requestId,
       model: item.model,
       voice: item.voice,
@@ -171,6 +152,7 @@ function buildSceneAudioModule(items) {
 export interface SceneAudioMeta {
   src: string;
   durationSec?: number;
+  provider: string;
   requestId: string;
   model: string;
   voice: string;
@@ -186,13 +168,143 @@ export const SCENE_AUDIO: Partial<Record<SceneId, SceneAudioMeta>> = ${JSON.stri
 `;
 }
 
+function buildTtsRequest({ provider, scene, config, text, outputFormat }) {
+  if (provider === 'minimax') {
+    const model =
+      scene.minimaxModel ??
+      config.global?.minimaxModel ??
+      process.env.MINIMAX_TTS_MODEL ??
+      scene.model ??
+      config.global?.model ??
+      'speech-2.8-hd';
+    const voice =
+      scene.minimaxVoice ??
+      config.global?.minimaxVoice ??
+      process.env.MINIMAX_TTS_VOICE ??
+      scene.voice ??
+      config.global?.voice ??
+      process.env.TTS_VOICE ??
+      'male-qn-qingse';
+    const speed = toNumber(
+      scene.speed ??
+        scene.rate ??
+        config.global?.speed ??
+        config.global?.rate ??
+        process.env.MINIMAX_TTS_SPEED ??
+        1
+    );
+    const volume = toNumber(
+      scene.minimaxVolume ??
+        scene.vol ??
+        config.global?.minimaxVolume ??
+        config.global?.vol ??
+        process.env.MINIMAX_TTS_VOLUME ??
+        1
+    );
+    const pitch = toNumber(
+      scene.minimaxPitch ??
+        config.global?.minimaxPitch ??
+        process.env.MINIMAX_TTS_PITCH ??
+        0
+    );
+
+    return {
+      model,
+      voice,
+      input: compactObject({
+        model,
+        text,
+        stream: false,
+        language_boost:
+          scene.languageBoost ??
+          config.global?.languageBoost ??
+          process.env.MINIMAX_TTS_LANGUAGE_BOOST ??
+          'auto',
+        output_format: 'hex',
+        voice_setting: compactObject({
+          voice_id: voice,
+          speed,
+          vol: volume,
+          pitch,
+          english_normalization:
+            scene.englishNormalization ?? config.global?.englishNormalization,
+        }),
+        audio_setting: compactObject({
+          sample_rate: toNumber(
+            scene.sampleRate ??
+              config.global?.sampleRate ??
+              process.env.MINIMAX_TTS_SAMPLE_RATE ??
+              32000
+          ),
+          bitrate: toNumber(
+            scene.bitrate ?? config.global?.bitrate ?? process.env.MINIMAX_TTS_BITRATE ?? 128000
+          ),
+          format: outputFormat,
+          channel: toNumber(
+            scene.channel ?? config.global?.channel ?? process.env.MINIMAX_TTS_CHANNEL ?? 1
+          ),
+        }),
+        pronunciation_dict:
+          scene.pronunciationDict ?? config.global?.pronunciationDict ?? undefined,
+        subtitle_enable: scene.subtitleEnable ?? config.global?.subtitleEnable,
+        subtitle_type: scene.subtitleType ?? config.global?.subtitleType,
+      }),
+    };
+  }
+
+  const model =
+    scene.qwenModel ??
+    config.global?.qwenModel ??
+    process.env.QWEN_TTS_MODEL ??
+    scene.model ??
+    config.global?.model ??
+    'cosyvoice-v3.5-plus';
+  const voice =
+    scene.qwenVoice ??
+    config.global?.qwenVoice ??
+    process.env.QWEN_TTS_VOICE ??
+    scene.voice ??
+    config.global?.voice ??
+    process.env.TTS_VOICE;
+
+  if (!voice) {
+    throw new Error('Missing environment variable: QWEN_TTS_VOICE');
+  }
+
+  return {
+    model,
+    voice,
+    input: compactObject({
+      text,
+      voice,
+      format: outputFormat,
+      sample_rate: scene.sampleRate ?? config.global?.sampleRate,
+      volume: scene.volume ?? config.global?.volume,
+      rate: scene.rate ?? config.global?.rate,
+      pitch: scene.pitch ?? config.global?.pitch,
+      instruction: scene.instruction || config.global?.instruction || undefined,
+      language_hints: scene.languageHints ?? config.global?.languageHints ?? undefined,
+      enable_ssml: scene.enableSsml ?? config.global?.enableSsml ?? undefined,
+    }),
+  };
+}
+
 async function synthesize(payload) {
+  if (payload.provider === 'minimax') {
+    return synthesizeMinimax(payload);
+  }
+
+  return synthesizeQwen(payload);
+}
+
+async function synthesizeQwen(payload) {
+  const apiKey = requireEnv('QWEN_TTS_API_KEY');
   const response = await fetchWithRetry(
-    API_URL,
+    QWEN_API_URL,
     {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${payload.apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -210,7 +322,70 @@ async function synthesize(payload) {
     );
   }
 
-  return response.json();
+  const json = await response.json();
+  const audioUrl = json.output?.audio?.url;
+
+  if (!audioUrl) {
+    throw new Error(
+      `scene ${payload.sceneId} returned no audio URL: ${JSON.stringify(json)}`
+    );
+  }
+
+  return {
+    audioBuffer: await downloadBuffer(audioUrl),
+    requestId: json.request_id,
+    characters: json.usage?.characters,
+  };
+}
+
+async function synthesizeMinimax(payload) {
+  const apiKey = normalizeBearerToken(requireAnyEnv(['MINIMAX_TTS_API_KEY', 'MINIMAX_API_KEY']));
+  const response = await fetchWithRetry(
+    MINIMAX_API_URL,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload.input),
+    },
+    'MiniMax TTS request'
+  );
+
+  const responseText = await response.text();
+  if (!response.ok) {
+    throw new Error(
+      `MiniMax TTS request failed (${response.status} ${response.statusText}): ${responseText}`
+    );
+  }
+
+  const json = JSON.parse(responseText);
+  const statusCode = json.base_resp?.status_code;
+  if (statusCode != null && statusCode !== 0) {
+    throw new Error(
+      `MiniMax TTS request failed (${statusCode}): ${
+        json.base_resp?.status_msg ?? responseText
+      }`
+    );
+  }
+
+  const audioHex = json.data?.audio ?? json.data?.audio_file;
+  if (!audioHex) {
+    throw new Error(
+      `scene ${payload.sceneId} returned no MiniMax audio data: ${JSON.stringify(json)}`
+    );
+  }
+
+  return {
+    audioBuffer: Buffer.from(audioHex, 'hex'),
+    requestId: json.trace_id,
+    characters: json.extra_info?.usage_characters,
+    durationSec:
+      typeof json.extra_info?.audio_length === 'number'
+        ? round(json.extra_info.audio_length / 1000)
+        : undefined,
+  };
 }
 
 async function downloadBuffer(url) {
@@ -307,6 +482,25 @@ function compactObject(input) {
   );
 }
 
+function resolveProvider(provider) {
+  const normalized = String(provider).trim().toLowerCase();
+  if (normalized === 'qwen' || normalized === 'cosyvoice') {
+    return 'qwen';
+  }
+  if (normalized === 'minimax') {
+    return 'minimax';
+  }
+  throw new Error(`Unsupported TTS provider: ${provider}`);
+}
+
+function toNumber(value) {
+  if (value == null || value === '') {
+    return undefined;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? number : value;
+}
+
 function sha1(value) {
   return createHash('sha1').update(value).digest('hex');
 }
@@ -317,6 +511,19 @@ function requireEnv(key) {
     throw new Error(`Missing environment variable: ${key}`);
   }
   return value;
+}
+
+function requireAnyEnv(keys) {
+  for (const key of keys) {
+    if (process.env[key]) {
+      return process.env[key];
+    }
+  }
+  throw new Error(`Missing environment variable: ${keys.join(' or ')}`);
+}
+
+function normalizeBearerToken(value) {
+  return stripMatchingQuotes(String(value).trim()).replace(/^Bearer\s+/i, '');
 }
 
 function loadEnvFile(filePath) {
@@ -332,7 +539,7 @@ function loadEnvFile(filePath) {
         continue;
       }
       const key = trimmed.slice(0, equalIndex).trim();
-      const value = trimmed.slice(equalIndex + 1).trim();
+      const value = stripMatchingQuotes(trimmed.slice(equalIndex + 1).trim());
       if (key && process.env[key] == null) {
         process.env[key] = value;
       }
@@ -343,6 +550,16 @@ function loadEnvFile(filePath) {
     }
     throw error;
   }
+}
+
+function stripMatchingQuotes(value) {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+  return value;
 }
 
 async function readJsonSafe(filePath, fallback) {

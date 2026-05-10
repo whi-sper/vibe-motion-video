@@ -1,5 +1,6 @@
 {
   "global": {
+    "provider": "qwen",
     "format": "wav",
     "sampleRate": 24000,
     "rate": 1,
@@ -11,7 +12,7 @@
   "scenes": [
     {
       "sceneId": "a",
-      "text": "Sam Altman 想必大家都不陌生",
+      "text": "Sam Altman 想必大家都不陌生,你以为他是ChatGPT之后才出名的？ 那就大错特错了",
       "instruction": ""
     },
     {
