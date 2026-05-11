@@ -11,12 +11,11 @@ const QUOTE_TEXT = '从打扑克学到的，比教授课堂上还多。';
 export const SceneC: React.FC<{ config: SceneConfig }> = () => {
   const frame = useCurrentFrame();
 
-  const quoteMarkAnim = fadeIn(frame, 0, 12);
-  const attrAnim = fadeIn(frame, s2f(2.0), 12);
-  const cardAnim = cardSlide(frame, s2f(2.5), 15);
-
-  // Per-char animation for quote
-  const chars = QUOTE_TEXT.split('');
+  const labelAnim = fadeIn(frame, s2f(0.2), 12);
+  const companyAnim = fadeIn(frame, s2f(0.7), 12);
+  const moneyAnim = cardSlide(frame, s2f(1.2), 16);
+  const ycAnim = fadeIn(frame, s2f(2.2), 12);
+  const quoteAnim = fadeIn(frame, s2f(3.0), 12);
 
   return (
     <AbsoluteFill
@@ -25,108 +24,109 @@ export const SceneC: React.FC<{ config: SceneConfig }> = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '155px 82px 260px',
+        padding: '120px 82px 520px',
       }}
     >
-      {/* Quote mark */}
-      <div
-        style={{
-          fontFamily: FONTS.serif,
-          fontSize: 186,
-          lineHeight: 0.4,
-          color: DESIGN.accent,
-          marginBottom: 42,
-          height: 82,
-          opacity: quoteMarkAnim.opacity,
-        }}
-      >
-        &ldquo;
-      </div>
-
-      {/* Quote text - per char */}
-      <div
-        style={{
-          fontFamily: FONTS.serif,
-          fontStyle: 'italic',
-          fontSize: 54,
-          lineHeight: 1.55,
-          color: DESIGN.ink,
-          textAlign: 'center',
-          marginBottom: 62,
-          maxWidth: 825,
-          fontWeight: 400,
-        }}
-      >
-        {chars.map((ch, i) => {
-          const startFrame = s2f(0.5) + Math.round(i * 1.8); // ~60ms per char
-          const anim = fadeIn(frame, startFrame, 12);
-          return (
-            <span
-              key={i}
-              style={{
-                display: 'inline-block',
-                opacity: anim.opacity,
-              }}
-            >
-              {ch}
-            </span>
-          );
-        })}
-      </div>
-
-      {/* Attribution */}
+      {/* Primary setup */}
       <div
         style={{
           fontFamily: FONTS.sans,
           fontSize: 26,
           fontWeight: 500,
-          color: DESIGN.muted,
-          letterSpacing: '0.2em',
-          marginBottom: 72,
+          color: DESIGN.accent,
+          letterSpacing: '0.22em',
           textTransform: 'uppercase' as const,
-          opacity: attrAnim.opacity,
+          opacity: labelAnim.opacity,
         }}
       >
-        — SAM ALTMAN, 后来在《纽约时报》
+        19 岁 · 第一家公司
       </div>
 
-      {/* Followup card */}
       <div
         style={{
-          width: '100%',
-          padding: '46px 52px',
-          borderRadius: 36,
-          background: 'linear-gradient(135deg, #fff 0%, #f0f5fc 100%)',
-          border: '1px solid rgba(44, 82, 130, 0.12)',
-          boxShadow: DESIGN.shadowMd,
-          opacity: cardAnim.opacity,
-          transform: cardAnim.transform,
+          fontFamily: FONTS.serif,
+          fontSize: 74,
+          lineHeight: 1.2,
+          color: DESIGN.ink,
+          textAlign: 'center',
+          marginTop: 30,
+          fontWeight: 400,
+          opacity: companyAnim.opacity,
+        }}
+      >
+        创办 <span style={{ color: DESIGN.accent }}>Loopt</span>
+      </div>
+
+      {/* Main number */}
+      <div
+        style={{
+          marginTop: 82,
+          opacity: moneyAnim.opacity,
+          transform: moneyAnim.transform,
+          textAlign: 'center',
         }}
       >
         <div
           style={{
             fontFamily: FONTS.sans,
-            fontSize: 23,
-            fontWeight: 500,
-            color: DESIGN.accent,
-            letterSpacing: '0.2em',
-            marginBottom: 16,
-            textTransform: 'uppercase' as const,
+            fontSize: 150,
+            fontWeight: 800,
+            color: DESIGN.ink,
+            lineHeight: 1,
+            whiteSpace: 'nowrap' as const,
           }}
         >
-          19 岁的第一笔创业
+          💵4000万+
         </div>
         <div
           style={{
-            fontFamily: FONTS.serif,
-            fontSize: 44,
-            color: DESIGN.ink,
-            lineHeight: 1.45,
+            fontFamily: FONTS.sans,
+            fontSize: 31,
+            fontWeight: 500,
+            color: DESIGN.critical,
+            letterSpacing: '0.16em',
+            marginTop: 30,
+            textTransform: 'uppercase' as const,
           }}
         >
-          创办 <span style={{ color: DESIGN.accent }}>Loopt</span> · 入选 YC
-          史上最早 8 家公司
+          美元收购价
         </div>
+      </div>
+
+      {/* Supporting context */}
+      <div
+        style={{
+          marginTop: 56,
+          opacity: ycAnim.opacity,
+          textAlign: 'center',
+          fontFamily: FONTS.sans,
+          fontSize: 23,
+          fontWeight: 400,
+          color: DESIGN.muted,
+          lineHeight: 1.5,
+          letterSpacing: '0.08em',
+        }}
+      >
+        入选 YC 史上最早 8 家公司
+      </div>
+
+      {/* Secondary quote */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 82,
+          right: 82,
+          bottom: 118,
+          fontFamily: FONTS.serif,
+          fontStyle: 'italic',
+          fontSize: 31,
+          lineHeight: 1.6,
+          color: DESIGN.muted,
+          textAlign: 'center',
+          opacity: quoteAnim.opacity,
+        }}
+      >
+        “{QUOTE_TEXT}”
       </div>
     </AbsoluteFill>
   );

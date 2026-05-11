@@ -14,6 +14,14 @@
       "sceneId": "a",
       "text": "Sam Altman想必大家都不陌生。很多人都是通过 OpenAI 认识他的。但如果你以为他只是“ChatGPT 的老板”，那就太低估这个人了。",
       "instruction": ""
+    },{
+      "sceneId": "b",
+      "text": "8岁拆电脑，17岁进斯坦福，19岁从斯坦福辍学创业。",
+      "instruction": ""
+    },{
+      "sceneId": "c",
+      "text": "第一家公司就卖了4000 多万美元",
+      "instruction": ""
     }
   ]
 }
