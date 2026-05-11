@@ -14,11 +14,11 @@ export interface SceneAudioMeta {
 export const SCENE_AUDIO: Partial<Record<SceneId, SceneAudioMeta>> = {
   "a": {
     "src": "tts/a/narration.wav",
-    "durationSec": 6.908,
+    "durationSec": 9.683,
     "provider": "minimax",
-    "requestId": "064f60e065e6881469a122f3f2c16c88",
+    "requestId": "0650fd99b092c23bef21a5b24e5bdad5",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
-    "text": "Sam Altman 想必大家都不陌生,你以为他是ChatGPT之后才出名的？ 那就大错特错了"
+    "text": "Sam Altman想必大家都不陌生。很多人都是通过 OpenAI 认识他的。但如果你以为他只是“ChatGPT 的老板”，那就太低估这个人了。"
   }
 };

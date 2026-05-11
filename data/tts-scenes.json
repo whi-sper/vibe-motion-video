@@ -1,6 +1,6 @@
 {
   "global": {
-    "provider": "qwen",
+    "provider": "minimax",
     "format": "wav",
     "sampleRate": 24000,
     "rate": 1,
@@ -12,57 +12,7 @@
   "scenes": [
     {
       "sceneId": "a",
-      "text": "Sam Altman 想必大家都不陌生,你以为他是因为 ChatGPT 才出名的？ 那就大错特错了",
-      "instruction": ""
-    },
-    {
-      "sceneId": "b",
-      "text": "8 岁拆电脑，17 岁进斯坦福，19 岁——退学。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "c",
-      "text": "他后来说——从打扑克学到的，比教授课堂上还多。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "1",
-      "text": "今天，他在 OpenAI 年薪 7 万 6。但身价 20 亿。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "2",
-      "text": "2009 年，1 万 5 美金买 Stripe 2% 股份。如今 700 亿。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "3",
-      "text": "Reddit 上市，他持股 8.7%——是 CEO 的两倍多。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "4",
-      "text": "Airbnb、Uber、Reddit、Dropbox……他押中了一整代。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "5",
-      "text": "不止于软件——3.75 亿押核聚变，1.8 亿砸抗衰老。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "6",
-      "text": "Oklo 创始股 0.002 美金。三年后——8.8 亿，回报 7 万倍。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "7",
-      "text": "而他在 OpenAI 的持股——是 0。",
-      "instruction": ""
-    },
-    {
-      "sceneId": "8",
-      "text": "他不是 ChatGPT 之父。他是硅谷最会下注的人。",
+      "text": "Sam Altman想必大家都不陌生。很多人都是通过 OpenAI 认识他的。但如果你以为他只是“ChatGPT 的老板”，那就太低估这个人了。",
       "instruction": ""
     }
   ]

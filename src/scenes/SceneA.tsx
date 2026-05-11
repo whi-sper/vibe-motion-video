@@ -18,15 +18,16 @@ export const SceneA: React.FC<{ config: SceneConfig }> = () => {
   const roleAnim = fadeIn(frame, s2f(3.4));
 
   // Phase 3: Word-by-word text reveal
+  const quoteStartFrame = 135;
   const words = [
-    { text: '你以为他', frame: s2f(4.0) },
-    { text: '是因为', frame: s2f(4.4) },
-    { text: 'ChatGPT', frame: s2f(4.8), isStrike: true },
-    { text: '才出名的？', frame: s2f(5.2) },
+    { text: '你以为他', frame: quoteStartFrame },
+    { text: '只是', frame: quoteStartFrame + s2f(0.4), isStrike: true },
+    { text: '“ChatGPT 的老板”？', frame: quoteStartFrame + s2f(0.8), isNewLine: true },
   ];
 
-  // Phase 4: Strikethrough on ChatGPT
-  const strikeWidth = strikeOut(frame, s2f(6.2));
+  // Phase 4: Strikethrough on "只是"
+  const strikeWidth = strikeOut(frame, 249);
+  const strikeActive = strikeWidth > 0;
 
   return (
     <AbsoluteFill
@@ -113,24 +114,23 @@ export const SceneA: React.FC<{ config: SceneConfig }> = () => {
       >
         {words.map((w, i) => {
           const anim = wordRise(frame, w.frame);
-          if (w.isStrike) {
-            return (
-              <span
-                key={i}
-                style={{
-                  display: 'inline-block',
-                  opacity: anim.opacity,
-                  transform: anim.transform,
-                  filter: anim.filter,
-                  position: 'relative',
-                  fontFamily: FONTS.sans,
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  color: DESIGN.ink,
-                  padding: '0 10px',
-                }}
-              >
-                ChatGPT
+          return (
+            <span
+              key={i}
+              style={{
+                display: w.isNewLine ? 'block' : 'inline-block',
+                opacity: anim.opacity,
+                transform: anim.transform,
+                filter: anim.filter,
+                position: 'relative',
+                fontWeight: w.isStrike && strikeActive ? 700 : 400,
+                marginTop: w.isNewLine ? 4 : 0,
+                whiteSpace: 'nowrap' as const,
+              }}
+            >
+              {w.text}
+              {i === 0 && '\u00a0'}
+              {w.isStrike && (
                 <span
                   style={{
                     position: 'absolute',
@@ -141,20 +141,7 @@ export const SceneA: React.FC<{ config: SceneConfig }> = () => {
                     backgroundColor: DESIGN.critical,
                   }}
                 />
-              </span>
-            );
-          }
-          return (
-            <span
-              key={i}
-              style={{
-                display: 'inline-block',
-                opacity: anim.opacity,
-                transform: anim.transform,
-                filter: anim.filter,
-              }}
-            >
-              {w.text}
+              )}
             </span>
           );
         })}
