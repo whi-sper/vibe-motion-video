@@ -2,159 +2,149 @@ import type { SceneConfig } from '../types';
 
 export const FPS = 30;
 
-/** Convert seconds to frames */
 export const s2f = (seconds: number): number => Math.round(seconds * FPS);
 
-/**
- * MASTER TIMING SHEET
- *
- * This is THE file you edit when TTS audio comes back.
- * Change durationInFrames to match TTS length + padding.
- * Change counter startFrame/durationFrames to sync with speech.
- */
 export const SCENE_CONFIGS: SceneConfig[] = [
-  // Scene A: Sticker reveal + provocation (9s)
   {
-    id: 'a',
-    durationInFrames: s2f(9),
-    caption: { text: 'Sam Altman 想必大家都不陌生' },
+    id: 's01',
+    durationInFrames: s2f(3),
+    caption: { text: 'Sam Altman想必大家都不陌生。', charStaggerFrames: 1.6 },
   },
-  // Scene B: Bio sketch (6.5s)
   {
-    id: 'b',
-    durationInFrames: s2f(6.5),
-    caption: { text: '8 岁拆电脑，17 岁进斯坦福，19 岁退学。' },
+    id: 's02',
+    durationInFrames: s2f(3),
+    caption: { text: '很多人都是通过 OpenAI 认识他的。', charStaggerFrames: 1.3 },
   },
-  // Scene C: Quote + Loopt (6.5s)
   {
-    id: 'c',
-    durationInFrames: s2f(6.5),
-    caption: { text: '"打扑克学到的比教授还多。" — 19 岁，他创办了 Loopt。' },
+    id: 's03',
+    durationInFrames: s2f(4),
+    caption: { text: '但如果你以为他只是“ChatGPT 的老板”。', charStaggerFrames: 1.2 },
   },
-  // Scene 1: Hook — salary vs net worth (6.5s)
   {
-    id: '1',
-    durationInFrames: s2f(6.5),
-    caption: { text: '20 年后的今天，他在 OpenAI 年薪 7 万 6。但身价 20 亿。' },
+    id: 's04',
+    durationInFrames: s2f(2),
+    caption: { text: '那就太低估这个人了。', charStaggerFrames: 1.2 },
+  },
+  {
+    id: 's05',
+    durationInFrames: s2f(4),
+    caption: { text: '他 19 岁从斯坦福辍学创业。', charStaggerFrames: 1.2 },
+  },
+  {
+    id: 's06',
+    durationInFrames: s2f(4),
+    caption: { text: '第一家公司卖了 4000 多万美元。', charStaggerFrames: 1.2 },
     counters: [
-      {
-        from: 0,
-        to: 76000,
-        prefix: '$',
-        format: 'big',
-        startFrame: s2f(0.3),
-        durationFrames: s2f(0.8),
-      },
-      {
-        from: 0,
-        to: 2_000_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(1.9),
-        durationFrames: s2f(1.2),
-      },
-    ],
-    flashAtFrame: s2f(1.9),
-  },
-  // Scene 2: Stripe (5.5s)
-  {
-    id: '2',
-    durationInFrames: s2f(5.5),
-    caption: { text: '$15,000 买 Stripe 2% 股份。如今 700 亿。' },
-    counters: [
-      {
-        from: 0,
-        to: 70_000_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(1.3),
-        durationFrames: s2f(1.3),
-      },
+      { from: 0, to: 43_400_000, prefix: '$', format: 'big', startFrame: s2f(1.6), durationFrames: s2f(0.8) },
     ],
   },
-  // Scene 3: Reddit (5s)
   {
-    id: '3',
+    id: 's07',
     durationInFrames: s2f(5),
-    caption: { text: 'Reddit 上市，他持股 8.7% — CEO 的 2 倍多。' },
-    counters: [
-      {
-        from: 0,
-        to: 8.7,
-        suffix: '%',
-        decimals: 1,
-        startFrame: s2f(0.8),
-        durationFrames: s2f(1),
-      },
-    ],
+    caption: { text: '28 岁时，他接管了硅谷最神秘的创业组织之一：Y Combinator。', charStaggerFrames: 0.9 },
   },
-  // Scene 4: Portfolio (5.5s)
   {
-    id: '4',
-    durationInFrames: s2f(5.5),
-    caption: { text: 'Airbnb、Reddit、Uber、Dropbox… 他押中了一整代。' },
-    counters: [
-      {
-        from: 0,
-        to: 400,
-        suffix: '+',
-        startFrame: s2f(1.3),
-        durationFrames: s2f(0.8),
-      },
-    ],
-  },
-  // Scene 5: Hard tech (6s)
-  {
-    id: '5',
+    id: 's08',
     durationInFrames: s2f(6),
-    caption: { text: '3.75 亿押核聚变，1.8 亿砸抗衰老。' },
+    caption: { text: '在他手里，YC 投出了 Airbnb、Stripe、Reddit、Coinbase。', charStaggerFrames: 0.9 },
+  },
+  {
+    id: 's09',
+    durationInFrames: s2f(3),
+    caption: { text: '后来，他又创办了 OpenAI。', charStaggerFrames: 1.3 },
+  },
+  {
+    id: 's10',
+    durationInFrames: s2f(3),
+    caption: { text: '而 ChatGPT，只是这个故事里最出圈的一部分。', charStaggerFrames: 0.9 },
+  },
+  {
+    id: 's11',
+    durationInFrames: s2f(5),
+    caption: { text: '更离谱的是——', startFrame: s2f(0.5), charStaggerFrames: 2 },
+  },
+  {
+    id: 's12',
+    durationInFrames: s2f(5),
+    caption: { text: 'OpenAI 估值已经冲到数千亿美元。', charStaggerFrames: 1.1 },
     counters: [
-      {
-        from: 0,
-        to: 375_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(1.3),
-        durationFrames: s2f(0.7),
-      },
-      {
-        from: 0,
-        to: 180_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(2.2),
-        durationFrames: s2f(0.7),
-      },
+      { from: 1, to: 300, prefix: '$', suffix: 'B', startFrame: s2f(0.45), durationFrames: s2f(2.6) },
     ],
   },
-  // Scene 6: Oklo (5.5s)
   {
-    id: '6',
-    durationInFrames: s2f(5.5),
-    caption: { text: 'Oklo 创始股 0.002 美金。三年回报 7 万倍。' },
+    id: 's13',
+    durationInFrames: s2f(4),
+    caption: { text: '但 Sam Altman 在 OpenAI 的持股，长期以来一直是 0。', charStaggerFrames: 0.9 },
+    flashAtFrame: s2f(0.65),
+  },
+  {
+    id: 's14',
+    durationInFrames: s2f(4),
+    caption: { text: '他公开披露过，自己在 OpenAI 年薪只有 7.6 万美元。', charStaggerFrames: 0.85 },
     counters: [
-      {
-        from: 0,
-        to: 880_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(1.7),
-        durationFrames: s2f(1),
-      },
+      { from: 0, to: 76000, prefix: '$', format: 'big', startFrame: s2f(1), durationFrames: s2f(1.4) },
     ],
   },
-  // Scene 7: Zero (5.5s)
   {
-    id: '7',
-    durationInFrames: s2f(5.5),
-    caption: { text: '而他在 OpenAI 的持股 — 是 0。' },
-    flashAtFrame: s2f(0.9),
+    id: 's15',
+    durationInFrames: s2f(5),
+    caption: { text: '可与此同时，他的个人身价却早已超过 20 亿美元。', charStaggerFrames: 0.95 },
+    counters: [
+      { from: 0, to: 2_000_000_000, prefix: '$', format: 'cn', startFrame: s2f(0.8), durationFrames: s2f(1.1) },
+    ],
   },
-  // Scene 8: Closing (5.5s)
   {
-    id: '8',
-    durationInFrames: s2f(5.5),
-    caption: { text: '他不是 ChatGPT 之父。他是硅谷最会下注的人。' },
+    id: 's16',
+    durationInFrames: s2f(5),
+    caption: { text: '因为他真正厉害的地方，不是“经营 OpenAI”。而是投资。', charStaggerFrames: 0.85 },
+  },
+  {
+    id: 's17',
+    durationInFrames: s2f(6),
+    caption: { text: '在 Reddit 上市前，他一度是 Reddit 的第三大股东。', charStaggerFrames: 0.9 },
+    counters: [
+      { from: 0, to: 8.7, suffix: '%', decimals: 1, startFrame: s2f(1.4), durationFrames: s2f(1) },
+    ],
+  },
+  {
+    id: 's18',
+    durationInFrames: s2f(5),
+    caption: { text: '他还很早押注了 Stripe、核聚变公司 Helion Energy、以及核能公司 Oklo。', charStaggerFrames: 0.7 },
+  },
+  {
+    id: 's19',
+    durationInFrames: s2f(6),
+    caption: { text: '很多人说，他不是 ChatGPT 之父。', charStaggerFrames: 1.1 },
+  },
+  {
+    id: 's20',
+    durationInFrames: s2f(3),
+    caption: { text: '他更像：硅谷最会下注的人。', charStaggerFrames: 1.25 },
+  },
+  {
+    id: 's21',
+    durationInFrames: s2f(6),
+    caption: { text: '因为别人还在研究“AI 能做什么”的时候。', charStaggerFrames: 1 },
+  },
+  {
+    id: 's22',
+    durationInFrames: s2f(7),
+    caption: { text: 'Sam Altman 已经在布局：AI 需要什么能源、什么芯片、什么基础设施。', charStaggerFrames: 0.75 },
+  },
+  {
+    id: 's23',
+    durationInFrames: s2f(6),
+    caption: { text: '很多年前，他就公开说过一句话：“AI 对世界的改变，会超过互联网。”', charStaggerFrames: 0.75 },
+  },
+  {
+    id: 's24',
+    durationInFrames: s2f(6),
+    caption: { text: '现在回头看，他说得可能还是保守了。', charStaggerFrames: 1 },
+  },
+  {
+    id: 's25',
+    durationInFrames: s2f(5),
+    caption: { text: '' },
   },
 ];
 

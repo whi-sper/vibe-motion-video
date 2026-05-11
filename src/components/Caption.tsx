@@ -26,6 +26,8 @@ export const Caption: React.FC<CaptionProps> = ({ frame, scenes }) => {
   if (!activeScene) return null;
 
   const { caption, tts } = activeScene;
+  if (!caption.text && (!tts || tts.words.length === 0)) return null;
+
   const startFrame = caption.startFrame ?? 0;
   const stagger = caption.charStaggerFrames ?? 1;
 
