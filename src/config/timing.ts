@@ -46,6 +46,14 @@ export const SCENE_CONFIGS: SceneConfig[] = [
     durationInFrames: sceneDuration('c', 6.5),
     caption: { text: '19 岁，他创办第一家公司 Loopt，后来卖了 4000 多万美元。' },
   },
+  // Scene D: YC takeover + portfolio reveal (7.5s)
+  {
+    id: 'd',
+    durationInFrames: sceneDuration('d', 7.5),
+    caption: {
+      text: '28 岁时，他接管了硅谷最神秘的创业组织之一：Y Combinator。在他手里，YC 投出了：Airbnb、Stripe、Reddit、Coinbase。',
+    },
+  },
   // Scene 1: Hook — salary vs net worth (6.5s)
   {
     id: '1',
