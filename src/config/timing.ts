@@ -54,6 +54,14 @@ export const SCENE_CONFIGS: SceneConfig[] = [
       text: '28 岁时，他接管了硅谷最神秘的创业组织之一：Y Combinator。在他手里，YC 投出了：Airbnb、Stripe、Reddit、Coinbase。',
     },
   },
+  // Scene E: OpenAI ecosystem reveal (7s)
+  {
+    id: 'e',
+    durationInFrames: sceneDuration('e', 7),
+    caption: {
+      text: '后来，他创办了 OpenAI。而 ChatGPT，只是这个故事里最出圈的一部分。',
+    },
+  },
   // Scene 1: Hook — salary vs net worth (6.5s)
   {
     id: '1',

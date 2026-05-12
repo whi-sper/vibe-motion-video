@@ -3,6 +3,7 @@ export type SceneId =
   | 'b'
   | 'c'
   | 'd'
+  | 'e'
   | '1'
   | '2'
   | '3'
