@@ -122,8 +122,8 @@ const SIDE_BUBBLES: ReadonlyArray<{
   { key: 'codex',   name: 'Codex',   x:  135, y:  279, size: 230, palette: 'lavender', fontSize: 38, delay: 156, bob: 2.7 },
   { key: 'sora',    name: 'Sora',    x: -135, y:  279, size: 235, palette: 'smoke',    fontSize: 40, delay: 162, bob: 3.6 },
   { key: 'prism',   name: 'Prism',   x: -302, y:   69, size: 230, palette: 'sky',      fontSize: 40, delay: 168, bob: 4.5 },
-  { key: 'dalle',   name: 'DALL·E',  x: -242, y: -193, size: 235, palette: 'peach',    fontSize: 40, delay: 174, bob: 5.4 },
-  { key: 'gpt4',    name: '...',     x:    0, y: -310, size: 240, palette: 'lavender', fontSize: 42, delay: 138, bob: 0   },
+  { key: 'dalle',   name: 'DALL·E',  x: 0, y: -310, size: 235, palette: 'peach',    fontSize: 40, delay: 174, bob: 5.4 },
+  { key: 'gpt4',    name: '...',     x:    -242, y: -193, size: 240, palette: 'lavender', fontSize: 42, delay: 138, bob: 0   },
 ];
 
 export const SceneE: React.FC<{ config: SceneConfig }> = () => {
@@ -198,50 +198,41 @@ export const SceneE: React.FC<{ config: SceneConfig }> = () => {
           marginTop: 54,
         }}
       >
-        {/* OpenAI lockup — fly in from right, fly out left */}
+        {/* OpenAI lockup — horizontal mark + wordmark, fly in/out */}
         <div
           style={{
             position: 'absolute',
             left: '50%',
             top: 184,
-            width: 620,
+            width: 820,
             height: 560,
-            marginLeft: -310,
+            marginLeft: -410,
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: 32,
             opacity: logoOpacity,
             transform: `translateX(${logoTranslateX}px) scale(${logoScale}) rotate(${logoRotate}deg)`,
             zIndex: 10,
           }}
         >
-          <div
+          <Img
+            src={staticFile('logos/openAI-logo.svg')}
             style={{
-              width: 340,
-              height: 340,
-              borderRadius: 64,
-              background: '#ffffff',
-              border: '1px solid rgba(26,26,26,0.06)',
-              boxShadow:
-                '0 30px 90px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.06)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: 200,
+              height: 200,
+              objectFit: 'contain',
+              flexShrink: 0,
             }}
-          >
-            <Img
-              src={staticFile('logos/openAI-logo.svg')}
-              style={{ width: 240, height: 240, objectFit: 'contain' }}
-            />
-          </div>
+          />
           <div
             style={{
-              marginTop: 38,
               fontFamily: FONTS.sans,
-              fontSize: 64,
+              fontSize: 168,
               fontWeight: 700,
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.03em',
+              lineHeight: 1,
               color: DESIGN.ink,
             }}
           >

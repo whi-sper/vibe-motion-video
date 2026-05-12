@@ -62,6 +62,14 @@ export const SCENE_CONFIGS: SceneConfig[] = [
       text: '后来，他创办了 OpenAI。而 ChatGPT，只是这个故事里最出圈的一部分。',
     },
   },
+  // Scene F: Valuation rocket → 0 stake reveal (8s)
+  {
+    id: 'f',
+    durationInFrames: sceneDuration('f', 8),
+    caption: {
+      text: '更离谱的是—— OpenAI 估值已经冲到数千亿美元。但 Sam Altman 在 OpenAI 的持股，长期以来一直是 0。',
+    },
+  },
   // Scene 1: Hook — salary vs net worth (6.5s)
   {
     id: '1',
