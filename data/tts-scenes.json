@@ -22,6 +22,12 @@
       "sceneId": "c",
       "text": "第一家公司就卖了4000 多万美元",
       "instruction": ""
+    },{
+      "sceneId":"d",
+      "text": "28 岁时，他接管了硅谷最神秘的创业组织之一：Y Combinator。"
+    },{
+      "sceneId":"e",
+      "text": "在他手里，YC 投出了：Airbnb、Stripe、Reddit、Coinbase。"
     }
   ]
 }
