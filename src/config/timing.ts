@@ -137,7 +137,7 @@ export const SCENE_CONFIGS: SceneConfig[] = [
     id: 'k',
     durationInFrames: sceneDuration('k', 6),
     caption: {
-      text: '很多年前，他就公开说过一句话："AI 对世界的改变，会超过互联网。"',
+      text: '很多年前，他就公开说过一句话："AI 对世界的改变，会超过互联网"',
     },
   },
   // Scene L: Identity — not just ChatGPT's father, but SV's best bettor (6s)

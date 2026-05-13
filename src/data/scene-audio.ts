@@ -109,7 +109,7 @@ export const SCENE_AUDIO: Partial<Record<SceneId, SceneAudioMeta>> = {
     "requestId": "0653c1ee45d8d65216994a1f6473696a",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
-    "text": "很多年前，他就公开说过一句话：“AI 对世界的改变，会超过互联网。”"
+    "text": "很多年前，他就公开说过一句话：“AI 对世界的改变，会超过互联网”"
   },
   "l": {
     "src": "tts/l/narration.wav",
