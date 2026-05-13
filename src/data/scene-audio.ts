@@ -14,18 +14,18 @@ export interface SceneAudioMeta {
 export const SCENE_AUDIO: Partial<Record<SceneId, SceneAudioMeta>> = {
   "a": {
     "src": "tts/a/narration.wav",
-    "durationSec": 9.683,
+    "durationSec": 9.59,
     "provider": "minimax",
-    "requestId": "0650fd99b092c23bef21a5b24e5bdad5",
+    "requestId": "0653c1bb04ac26a3e4cf1d2232138653",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "Sam Altman想必大家都不陌生。很多人都是通过 OpenAI 认识他的。但如果你以为他只是“ChatGPT 的老板”，那就太低估这个人了。"
   },
   "b": {
     "src": "tts/b/narration.wav",
-    "durationSec": 5.921,
+    "durationSec": 6.478,
     "provider": "minimax",
-    "requestId": "0653b663222f83d70924369ace531e0a",
+    "requestId": "0653c1c1c998dd579984d736a7d9468a",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "8岁拆电脑，17岁进斯坦福，19岁从斯坦福辍学创业。"
@@ -34,34 +34,34 @@ export const SCENE_AUDIO: Partial<Record<SceneId, SceneAudioMeta>> = {
     "src": "tts/c/narration.wav",
     "durationSec": 2.682,
     "provider": "minimax",
-    "requestId": "0653b664169efefb27e765c2b1686f30",
+    "requestId": "0653c1c8308da1b10f806edf42aeda23",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "第一家公司就卖了4000 多万美元"
   },
   "d": {
     "src": "tts/d/narration.wav",
-    "durationSec": 11.041,
+    "durationSec": 11.471,
     "provider": "minimax",
-    "requestId": "0653b665032923d165ac55d6f153505b",
+    "requestId": "0653c1c9913fb3882f441cf180302d34",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "28 岁时，他接管了硅谷最神秘的创业组织之一：Y Combinator。在他手里，YC 投出了：Airbnb、Stripe、Reddit、Coinbase。"
   },
   "e": {
     "src": "tts/e/narration.wav",
-    "durationSec": 6.142,
+    "durationSec": 6.397,
     "provider": "minimax",
-    "requestId": "0653b6677a86ad31c82fb4093d87e99c",
+    "requestId": "0653c1d245700983306e3ad9bb011ba4",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "后来，他又创办了 OpenAI。而 ChatGPT，只是这个故事里最出圈的一部分。"
   },
   "f": {
     "src": "tts/f/narration.wav",
-    "durationSec": 9.636,
+    "durationSec": 9.938,
     "provider": "minimax",
-    "requestId": "0653b668631ad42381f4467e7845d52a",
+    "requestId": "0653c1d784e0eb8a2f693c91e78940ca",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "更离谱的是——OpenAI 估值已经冲到数千亿美元。但 Sam Altman 在 OpenAI 的持股，长期以来一直是 0。"
@@ -70,52 +70,52 @@ export const SCENE_AUDIO: Partial<Record<SceneId, SceneAudioMeta>> = {
     "src": "tts/g/narration.wav",
     "durationSec": 8.824,
     "provider": "minimax",
-    "requestId": "0653b669189489bda60dda947407580a",
+    "requestId": "0653c1decb31e3f2a624e6b784aa8cac",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "他公开披露过，自己在 OpenAI 年薪只有 7.6 万美元。 与此同时，他的个人身价却早已超过 20 亿美元。"
   },
   "h": {
     "src": "tts/h/narration.wav",
-    "durationSec": 4.899,
+    "durationSec": 4.342,
     "provider": "minimax",
-    "requestId": "0653b66ad179c97fd6778c39ed62c5da",
+    "requestId": "0653c1e3aac7f62b80bdc531e80e2e3a",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "因为他真正厉害的地方，不是“经营 OpenAI”。而是投资。"
   },
   "i": {
     "src": "tts/i/narration.wav",
-    "durationSec": 6.525,
+    "durationSec": 5.329,
     "provider": "minimax",
-    "requestId": "0653b66bfcf9e4d1e1d0b673bf75c78d",
+    "requestId": "0653c1e78cdc247edb3c5d09631bfcdc",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "在 Reddit 上市前，他一度是 Reddit 的第三大股东，持股接近 9%"
   },
   "j": {
     "src": "tts/j/narration.wav",
-    "durationSec": 6.351,
+    "durationSec": 5.886,
     "provider": "minimax",
-    "requestId": "0653b66c2e7fa8af3d4dea4226529898",
+    "requestId": "0653c1ea4aa9a882a3d7c06edf35c7b8",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "他还很早押注了 Stripe、核聚变公司 Helion Energy、以及核能公司 Oklo。"
   },
   "k": {
     "src": "tts/k/narration.wav",
-    "durationSec": 6.095,
+    "durationSec": 5.201,
     "provider": "minimax",
-    "requestId": "0653b66d345358daa52eadac92f1b690",
+    "requestId": "0653c1ee45d8d65216994a1f6473696a",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "很多年前，他就公开说过一句话：“AI 对世界的改变，会超过互联网。”"
   },
   "l": {
     "src": "tts/l/narration.wav",
-    "durationSec": 5.12,
+    "durationSec": 4.772,
     "provider": "minimax",
-    "requestId": "0653b66e136f2868d2edaddcba5e5de2",
+    "requestId": "0653c1f3b69454c04b4aad9c5b3ef081",
     "model": "speech-2.8-hd",
     "voice": "moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d",
     "text": "他不仅是 ChatGPT 之父。他更像：硅谷最会下注的人。"

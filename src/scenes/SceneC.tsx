@@ -10,10 +10,12 @@ const QUOTE_TEXT = '从打扑克学到的，比教授课堂上还多。';
 
 export const SceneC: React.FC<{ config: SceneConfig }> = () => {
   const frame = useCurrentFrame();
+  const shineStartFrame = 20;
+  const shineEndFrame = 62;
 
   const sceneAnim = fadeIn(frame, s2f(0.4), 18);
-  const shineActive = frame >= 90 && frame <= 132;
-  const shinePosition = interpolate(frame, [90, 132], [-40, 140], {
+  const shineActive = frame >= shineStartFrame && frame <= shineEndFrame;
+  const shinePosition = interpolate(frame, [shineStartFrame, shineEndFrame], [-40, 140], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });

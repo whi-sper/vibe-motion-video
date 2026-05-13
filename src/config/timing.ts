@@ -92,11 +92,11 @@ export const SCENE_CONFIGS: SceneConfig[] = [
         to: 2_000_000_000,
         prefix: '$',
         format: 'cn',
-        startFrame: s2f(1.9),
+        startFrame: s2f(4.1),
         durationFrames: s2f(1.2),
       },
     ],
-    flashAtFrame: s2f(1.9),
+    flashAtFrame: s2f(4.1),
   },
   // Scene H: Sam as investor — sticker + investment network (7s)
   {

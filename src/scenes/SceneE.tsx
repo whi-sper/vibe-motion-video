@@ -117,13 +117,13 @@ const SIDE_BUBBLES: ReadonlyArray<{
   bob: number;
 }> = [
   // All 7 bubbles on a circle of radius 310 around ChatGPT, evenly spaced at 51.4°
-  { key: 'atlas',   name: 'Atlas',   x:  242, y: -193, size: 235, palette: 'sky',      fontSize: 40, delay: 144, bob: 0.9 },
-  { key: 'whisper', name: 'Whisper', x:  302, y:   69, size: 230, palette: 'peach',    fontSize: 38, delay: 150, bob: 1.8 },
-  { key: 'codex',   name: 'Codex',   x:  135, y:  279, size: 230, palette: 'lavender', fontSize: 38, delay: 156, bob: 2.7 },
-  { key: 'sora',    name: 'Sora',    x: -135, y:  279, size: 235, palette: 'smoke',    fontSize: 40, delay: 162, bob: 3.6 },
-  { key: 'prism',   name: 'Prism',   x: -302, y:   69, size: 230, palette: 'sky',      fontSize: 40, delay: 168, bob: 4.5 },
-  { key: 'dalle',   name: 'DALL·E',  x: 0, y: -310, size: 235, palette: 'peach',    fontSize: 40, delay: 174, bob: 5.4 },
-  { key: 'gpt4',    name: '...',     x:    -242, y: -193, size: 240, palette: 'lavender', fontSize: 42, delay: 138, bob: 0   },
+  { key: 'atlas',   name: 'Atlas',   x:  242, y: -193, size: 235, palette: 'sky',      fontSize: 40, delay: 132, bob: 0.9 },
+  { key: 'whisper', name: 'Whisper', x:  302, y:   69, size: 230, palette: 'peach',    fontSize: 38, delay: 138, bob: 1.8 },
+  { key: 'codex',   name: 'Codex',   x:  135, y:  279, size: 230, palette: 'lavender', fontSize: 38, delay: 144, bob: 2.7 },
+  { key: 'sora',    name: 'Sora',    x: -135, y:  279, size: 235, palette: 'smoke',    fontSize: 40, delay: 150, bob: 3.6 },
+  { key: 'prism',   name: 'Prism',   x: -302, y:   69, size: 230, palette: 'sky',      fontSize: 40, delay: 156, bob: 4.5 },
+  { key: 'dalle',   name: 'DALL·E',  x: 0, y: -310, size: 235, palette: 'peach',    fontSize: 40, delay: 162, bob: 5.4 },
+  { key: 'gpt4',    name: '...',     x:    -242, y: -193, size: 240, palette: 'lavender', fontSize: 42, delay: 126, bob: 0   },
 ];
 
 export const SceneE: React.FC<{ config: SceneConfig }> = () => {
@@ -153,7 +153,7 @@ export const SceneE: React.FC<{ config: SceneConfig }> = () => {
     extrapolateRight: 'clamp',
     easing: APPLE_EASE,
   });
-  const chatShrink = interpolate(frame, [128, 158], [0, 1], {
+  const chatShrink = interpolate(frame, [116, 146], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
     easing: Easing.inOut(Easing.cubic),

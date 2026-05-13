@@ -285,19 +285,6 @@ export const SceneJ: React.FC<{ config: SceneConfig }> = () => {
         })}
       </div>
 
-      {/* Footer */}
-      <div
-        style={{
-          fontFamily: FONTS.chinese,
-          fontSize: 32,
-          color: DESIGN.inkSoft,
-          textAlign: 'center' as const,
-          opacity: footerAnim.opacity,
-        }}
-      >
-        早就押在了{' '}
-        <strong style={{ color: DESIGN.ink, fontWeight: 700 }}>未来</strong>
-      </div>
     </AbsoluteFill>
   );
 };

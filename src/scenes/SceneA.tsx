@@ -26,7 +26,7 @@ export const SceneA: React.FC<{ config: SceneConfig }> = () => {
   ];
 
   // Phase 4: Strikethrough on "只是"
-  const strikeWidth = strikeOut(frame, 249);
+  const strikeWidth = strikeOut(frame, 220);
   const strikeActive = strikeWidth > 0;
 
   return (

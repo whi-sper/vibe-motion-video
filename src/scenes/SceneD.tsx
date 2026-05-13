@@ -22,7 +22,7 @@ const COMPANIES = [
     rotate: -6,
     fromX: -190,
     fromY: 38,
-    delay: 108,
+    delay: 140,
   },
   {
     key: 'stripe',
@@ -33,7 +33,7 @@ const COMPANIES = [
     rotate: 4,
     fromX: 0,
     fromY: -180,
-    delay: 116,
+    delay: 148,
   },
   {
     key: 'reddit',
@@ -44,7 +44,7 @@ const COMPANIES = [
     rotate: -4,
     fromX: 188,
     fromY: 28,
-    delay: 124,
+    delay: 156,
   },
   {
     key: 'coinbase',
@@ -55,7 +55,7 @@ const COMPANIES = [
     rotate: 4,
     fromX: -16,
     fromY: 210,
-    delay: 132,
+    delay: 164,
   },
 ] as const;
 
@@ -71,7 +71,7 @@ export const SceneD: React.FC<{ config: SceneConfig }> = () => {
     extrapolateRight: 'clamp',
     easing: Easing.out(Easing.cubic),
   });
-  const stampExit = interpolate(frame, [84, 108], [0, 1], {
+  const stampExit = interpolate(frame, [96, 140], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
     easing: Easing.inOut(Easing.cubic),

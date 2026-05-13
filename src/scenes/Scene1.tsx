@@ -10,13 +10,15 @@ import { s2f } from '../config/timing';
 
 export const Scene1: React.FC<{ config: SceneConfig }> = ({ config }) => {
   const frame = useCurrentFrame();
+  const netWorthStartFrame = config.counters?.[1]?.startFrame ?? s2f(1.9);
+  const eyebrowBrightStartFrame = Math.max(0, netWorthStartFrame - 6);
 
   const eyebrowAnim = fadeIn(frame, s2f(0.1), 15);
   const salaryAnim = numIn(frame, s2f(0.3), 18);
   const roleAnim = fadeIn(frame, s2f(0.6), 12);
   const vsAnim = fadeIn(frame, s2f(1.4), 12);
-  const eyebrowBrightAnim = fadeIn(frame, s2f(1.7), 12);
-  const netWorthAnim = megaIn(frame, s2f(1.9), 24);
+  const eyebrowBrightAnim = fadeIn(frame, eyebrowBrightStartFrame, 12);
+  const netWorthAnim = megaIn(frame, netWorthStartFrame, 24);
 
   return (
     <AbsoluteFill
@@ -93,7 +95,7 @@ export const Scene1: React.FC<{ config: SceneConfig }> = ({ config }) => {
           opacity: vsAnim.opacity,
         }}
       >
-        而他的
+        ---
       </div>
 
       {/* Bright eyebrow */}
