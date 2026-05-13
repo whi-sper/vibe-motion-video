@@ -103,6 +103,24 @@ export const SCENE_CONFIGS: SceneConfig[] = [
       text: '因为他真正厉害的地方，不是"经营 OpenAI"。而是投资。',
     },
   },
+  // Scene I: Reddit pre-IPO 第三大股东 ~9% (6s, modified from Scene3)
+  {
+    id: 'i',
+    durationInFrames: sceneDuration('i', 6),
+    caption: {
+      text: '在 Reddit 上市前，他一度是 Reddit 的第三大股东，持股接近 9%。',
+    },
+    counters: [
+      {
+        from: 0,
+        to: 8.7,
+        suffix: '%',
+        decimals: 1,
+        startFrame: s2f(0.8),
+        durationFrames: s2f(1),
+      },
+    ],
+  },
   // Scene 2: Stripe (5.5s)
   {
     id: '2',
@@ -116,22 +134,6 @@ export const SCENE_CONFIGS: SceneConfig[] = [
         format: 'cn',
         startFrame: s2f(1.3),
         durationFrames: s2f(1.3),
-      },
-    ],
-  },
-  // Scene 3: Reddit (5s)
-  {
-    id: '3',
-    durationInFrames: sceneDuration('3', 5),
-    caption: { text: 'Reddit 上市，他持股 8.7% — CEO 的 2 倍多。' },
-    counters: [
-      {
-        from: 0,
-        to: 8.7,
-        suffix: '%',
-        decimals: 1,
-        startFrame: s2f(0.8),
-        durationFrames: s2f(1),
       },
     ],
   },
