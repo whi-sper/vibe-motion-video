@@ -121,89 +121,29 @@ export const SCENE_CONFIGS: SceneConfig[] = [
       },
     ],
   },
-  // Scene 2: Stripe (5.5s)
+  // Scene J: Three early bets — Stripe + Helion + Oklo (6.5s)
   {
-    id: '2',
-    durationInFrames: sceneDuration('2', 5.5),
-    caption: { text: '$15,000 买 Stripe 2% 股份。如今 700 亿。' },
-    counters: [
-      {
-        from: 0,
-        to: 70_000_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(1.3),
-        durationFrames: s2f(1.3),
-      },
-    ],
+    id: 'j',
+    durationInFrames: sceneDuration('j', 6.5),
+    caption: {
+      text: '他还很早押注了 Stripe、核聚变公司 Helion Energy、以及核能公司 Oklo。',
+    },
   },
-  // Scene 4: Portfolio (5.5s)
+  // Scene K: Famous quote — AI > Internet (6s)
   {
-    id: '4',
-    durationInFrames: sceneDuration('4', 5.5),
-    caption: { text: 'Airbnb、Reddit、Uber、Dropbox… 他押中了一整代。' },
-    counters: [
-      {
-        from: 0,
-        to: 400,
-        suffix: '+',
-        startFrame: s2f(1.3),
-        durationFrames: s2f(0.8),
-      },
-    ],
+    id: 'k',
+    durationInFrames: sceneDuration('k', 6),
+    caption: {
+      text: '很多年前，他就公开说过一句话："AI 对世界的改变，会超过互联网。"',
+    },
   },
-  // Scene 5: Hard tech (6s)
+  // Scene L: Identity — not just ChatGPT's father, but SV's best bettor (6s)
   {
-    id: '5',
-    durationInFrames: sceneDuration('5', 6),
-    caption: { text: '3.75 亿押核聚变，1.8 亿砸抗衰老。' },
-    counters: [
-      {
-        from: 0,
-        to: 375_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(1.3),
-        durationFrames: s2f(0.7),
-      },
-      {
-        from: 0,
-        to: 180_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(2.2),
-        durationFrames: s2f(0.7),
-      },
-    ],
-  },
-  // Scene 6: Oklo (5.5s)
-  {
-    id: '6',
-    durationInFrames: sceneDuration('6', 5.5),
-    caption: { text: 'Oklo 创始股 0.002 美金。三年回报 7 万倍。' },
-    counters: [
-      {
-        from: 0,
-        to: 880_000_000,
-        prefix: '$',
-        format: 'cn',
-        startFrame: s2f(1.7),
-        durationFrames: s2f(1),
-      },
-    ],
-  },
-  // Scene 7: Zero (5.5s)
-  {
-    id: '7',
-    durationInFrames: sceneDuration('7', 5.5),
-    caption: { text: '而他在 OpenAI 的持股 — 是 0。' },
-    flashAtFrame: s2f(0.9),
-  },
-  // Scene 8: Closing (5.5s)
-  {
-    id: '8',
-    durationInFrames: sceneDuration('8', 5.5),
-    caption: { text: '他不是 ChatGPT 之父。他是硅谷最会下注的人。' },
+    id: 'l',
+    durationInFrames: sceneDuration('l', 6),
+    caption: {
+      text: '他不仅是 ChatGPT 之父。他更像：硅谷最会下注的人。',
+    },
   },
 ];
 

@@ -15,14 +15,11 @@ import { SceneD } from './scenes/SceneD';
 import { SceneE } from './scenes/SceneE';
 import { SceneF } from './scenes/SceneF';
 import { SceneH } from './scenes/SceneH';
+import { SceneJ } from './scenes/SceneJ';
+import { SceneK } from './scenes/SceneK';
+import { SceneL } from './scenes/SceneL';
 import { Scene1 } from './scenes/Scene1';
-import { Scene2 } from './scenes/Scene2';
 import { Scene3 } from './scenes/Scene3';
-import { Scene4 } from './scenes/Scene4';
-import { Scene5 } from './scenes/Scene5';
-import { Scene6 } from './scenes/Scene6';
-import { Scene7 } from './scenes/Scene7';
-import { Scene8 } from './scenes/Scene8';
 
 const SCENE_MAP: Record<string, React.FC<{ config: SceneConfig }>> = {
   a: SceneA,
@@ -34,12 +31,9 @@ const SCENE_MAP: Record<string, React.FC<{ config: SceneConfig }>> = {
   'g': Scene1,
   h: SceneH,
   i: Scene3,
-  '2': Scene2,
-  '4': Scene4,
-  '5': Scene5,
-  '6': Scene6,
-  '7': Scene7,
-  '8': Scene8,
+  j: SceneJ,
+  k: SceneK,
+  l: SceneL,
 };
 
 export const Sam: React.FC = () => {

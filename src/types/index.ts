@@ -8,13 +8,9 @@ export type SceneId =
   | 'g'
   | 'h'
   | 'i'
-  | '2'
-  | '3'
-  | '4'
-  | '5'
-  | '6'
-  | '7'
-  | '8';
+  | 'j'
+  | 'k'
+  | 'l';
 
 export interface CounterConfig {
   from: number;
