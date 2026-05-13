@@ -6,6 +6,9 @@ export const FPS = 30;
 /** Convert seconds to frames */
 export const s2f = (seconds: number): number => Math.round(seconds * FPS);
 
+/** Audio playback speed multiplier (1.2 = 20% faster than recorded) */
+export const AUDIO_PLAYBACK_RATE = 1.2;
+
 const POST_AUDIO_PADDING_SEC = 0.5;
 
 const sceneDuration = (
@@ -15,7 +18,7 @@ const sceneDuration = (
   const audioDurationSec = SCENE_AUDIO[sceneId]?.durationSec;
   return s2f(
     typeof audioDurationSec === 'number'
-      ? audioDurationSec + POST_AUDIO_PADDING_SEC
+      ? audioDurationSec / AUDIO_PLAYBACK_RATE + POST_AUDIO_PADDING_SEC
       : fallbackSec
   );
 };

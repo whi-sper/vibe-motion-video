@@ -3,7 +3,7 @@ import { Audio, Series, staticFile, useCurrentFrame } from 'remotion';
 import { PhoneFrame } from './components/PhoneFrame';
 import { ProgressBar } from './components/ProgressBar';
 import { Caption } from './components/Caption';
-import { SCENE_CONFIGS } from './config/timing';
+import { SCENE_CONFIGS, AUDIO_PLAYBACK_RATE } from './config/timing';
 import { SCENE_AUDIO } from './data/scene-audio';
 import type { SceneConfig } from './types';
 
@@ -55,7 +55,12 @@ export const Sam: React.FC = () => {
             >
               <>
                 <SceneComp config={config} />
-                {audio ? <Audio src={staticFile(audio.src)} /> : null}
+                {audio ? (
+                  <Audio
+                    src={staticFile(audio.src)}
+                    playbackRate={AUDIO_PLAYBACK_RATE}
+                  />
+                ) : null}
               </>
             </Series.Sequence>
           );
