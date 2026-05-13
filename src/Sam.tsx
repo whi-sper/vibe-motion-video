@@ -14,6 +14,7 @@ import { SceneC } from './scenes/SceneC';
 import { SceneD } from './scenes/SceneD';
 import { SceneE } from './scenes/SceneE';
 import { SceneF } from './scenes/SceneF';
+import { SceneH } from './scenes/SceneH';
 import { Scene1 } from './scenes/Scene1';
 import { Scene2 } from './scenes/Scene2';
 import { Scene3 } from './scenes/Scene3';
@@ -30,7 +31,8 @@ const SCENE_MAP: Record<string, React.FC<{ config: SceneConfig }>> = {
   d: SceneD,
   e: SceneE,
   f: SceneF,
-  '1': Scene1,
+  'g': Scene1,
+  h: SceneH,
   '2': Scene2,
   '3': Scene3,
   '4': Scene4,

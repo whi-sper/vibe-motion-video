@@ -70,10 +70,10 @@ export const SCENE_CONFIGS: SceneConfig[] = [
       text: '更离谱的是—— OpenAI 估值已经冲到数千亿美元。但 Sam Altman 在 OpenAI 的持股，长期以来一直是 0。',
     },
   },
-  // Scene 1: Hook — salary vs net worth (6.5s)
+  // Scene G: Hook — salary vs net worth (6.5s, reuses Scene1)
   {
-    id: '1',
-    durationInFrames: sceneDuration('1', 6.5),
+    id: 'g',
+    durationInFrames: sceneDuration('g', 6.5),
     caption: { text: '20 年后的今天，他在 OpenAI 年薪 7 万 6。但身价 20 亿。' },
     counters: [
       {
@@ -94,6 +94,14 @@ export const SCENE_CONFIGS: SceneConfig[] = [
       },
     ],
     flashAtFrame: s2f(1.9),
+  },
+  // Scene H: Sam as investor — sticker + investment network (7s)
+  {
+    id: 'h',
+    durationInFrames: sceneDuration('h', 7),
+    caption: {
+      text: '因为他真正厉害的地方，不是"经营 OpenAI"。而是投资。',
+    },
   },
   // Scene 2: Stripe (5.5s)
   {
